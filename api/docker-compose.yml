@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+    app:
+        build: .
+        command: npm start
+        container_name: app
+        ports:
+            - "3000:3000"
+        depends_on:
+            - db
+        links:
+            - db
+        volumes:
+            - .:/usr/app
+    db:
+        image: 'mongo'
+        container_name: db
+        ports:
+            - '27017:27017'
+        volumes:
+            - ./data/db:/data/db
