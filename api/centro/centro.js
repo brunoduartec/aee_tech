@@ -1,11 +1,11 @@
-import requiredParam from '../helper/required-param'
-import {
+const requiredParam = require('../helpers/required-param')
+const {
     InvalidPropertyError
-} from '../helper/errors'
+} = require('../helpers/errors')
 
-export default function makeCentro({
+module.exports = function makeCentro(
     centroInfo = requiredParam('centroInfo')
-}) {
+) {
 
     const validCentro = validate(centroInfo)
     const normalCentro = normalize(centroInfo)

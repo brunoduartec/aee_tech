@@ -1,6 +1,6 @@
-import makeDb from '../db'
-import makeCentroList from './centro-list'
-import makeCentroEndpointHandler from './centro-endpoint'
+const makeDb = require('../db')
+const makeCentroList = require('./centro-list')
+const makeCentroEndpointHandler = require('./centro-endpoint')
 
 const database = makeDb()
 const centroList = makeCentroList({
@@ -10,4 +10,4 @@ const contactsEndpointHandler = makeCentroEndpointHandler({
     centroList
 })
 
-export default makeCentroEndpointHandler
+module.exports = contactsEndpointHandler

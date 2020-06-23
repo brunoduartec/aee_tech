@@ -1,9 +1,9 @@
-import makeCentro from './centro'
-import {
+const makeCentro = require('./centro')
+const {
     UniqueConstraintError
-} from '../helper/errors'
+} = require('../helpers/errors')
 
-export default function makeCentroList({
+module.exports = function makeCentroList({
     database
 }) {
     return Object.freeze({
@@ -15,9 +15,21 @@ export default function makeCentroList({
         update
     })
 
-    async function add() {}
-    async function findById() {}
-    async function getItems() {}
+    async function add({
+        centroId,
+        ...centro
+    }) {
+        const params = ["Nome", "Regional", "Membros"]
+        return await database.add("Centro", params, centro)
+    }
+    async function findById(id) {
+        const params = ["Nome", "Regional", "Membros"]
+        return await database.findById("Centro", id, )
+    }
+    async function getItems() {
+        const params = ["Nome", "Regional", "Membros"]
+        return await database.getItems("Centro", params);
+    }
     async function remove() {}
     async function replace() {}
     async function update() {}

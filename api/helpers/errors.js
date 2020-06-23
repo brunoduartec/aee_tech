@@ -1,5 +1,5 @@
-export class UniqueConstraintError extends Error {
-  constructor (value) {
+exports.UniqueConstraintError = class UniqueConstraintError extends Error {
+  constructor(value) {
     super(`${value} must be unique.`)
 
     if (Error.captureStackTrace) {
@@ -8,8 +8,8 @@ export class UniqueConstraintError extends Error {
   }
 }
 
-export class InvalidPropertyError extends Error {
-  constructor (msg) {
+exports.InvalidPropertyError = class InvalidPropertyError extends Error {
+  constructor(msg) {
     super(msg)
 
     if (Error.captureStackTrace) {
@@ -18,8 +18,8 @@ export class InvalidPropertyError extends Error {
   }
 }
 
-export class RequiredParameterError extends Error {
-  constructor (param) {
+exports.RequiredParameterError = class RequiredParameterError extends Error {
+  constructor(param) {
     super(`${param} can not be null or undefined.`)
 
     if (Error.captureStackTrace) {

@@ -1,12 +1,12 @@
-import {
+const {
     UniqueConstraintError,
     InvalidPropertyError,
     RequiredParameterError
-} from '../helper/errors'
-import makeHttpError from '../helpers/http-error'
-import makeCentro from './centro'
+} = require('../helpers/errors')
+const makeHttpError = require('../helpers/http-error')
+const makeCentro = require('./centro')
 
-export default function makeCentroEndpointHandler({
+module.exports = function makeCentroEndpointHandler({
     centroList
 }) {
     return async function handle(httpRequest) {
@@ -16,6 +16,13 @@ export default function makeCentroEndpointHandler({
                 break;
             case 'GET':
                 return getCentros(httpRequest)
+                break;
+            case 'DELETE':
+                return removeCentro(httpRequest)
+                break;
+            case 'PUT':
+                return updateCentro(httpRequest)
+                break;
 
             default:
                 return makeHttpError({
@@ -85,11 +92,33 @@ export default function makeCentroEndpointHandler({
             return makeHttpError({
                 errorMessage: e.message,
                 statusCode: e instanceof UniqueConstraintError ?
-                    409 :
-                    e instanceof InvalidPropertyError ||
+                    409 : e instanceof InvalidPropertyError ||
                     e instanceof RequiredParameterError ?
-                    400 :
-                    500
+                    400 : 500
+            })
+        }
+    }
+
+    async function removeCentro(httpRequest) {
+        return {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            statusCode: 200,
+            data: JSON.stringify({
+                "TODO": "Adicionar aqui o remove"
+            })
+        }
+    }
+
+    async function updateCentro(httpRequest) {
+        return {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            statusCode: 200,
+            data: JSON.stringify({
+                "TODO": "Adicionar aqui o update"
             })
         }
     }

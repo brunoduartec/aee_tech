@@ -1,8 +1,9 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import env from './env.json'
-import handleCentroRequest from './centro'
-import adaptRequest from './helpers/adapt-request'
+const express = require('express')
+const bodyParser = require('body-parser')
+const env = require('./env.json')
+
+const handleCentroRequest = require('./centro')
+const adaptRequest = require('./helpers/adapt-request')
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,16 +19,19 @@ function centroController(req, res) {
     const httpRequest = adaptRequest(req)
     handleCentroRequest(httpRequest)
         .then(({
-                headers,
-                statusCode,
-                data
-            }) =>
+            headers,
+            statusCode,
+            data
+        }) => {
             res
-            .set(headers)
-            .status(statusCode)
-            .send(data)
-        )
-        .catch(e => res.status(500).end())
+                .set(headers)
+                .status(statusCode)
+                .send(data)
+        })
+        .catch(e => {
+            console.log(e);
+            res.status(500).end()
+        })
 }
 
 app.listen(env.port, env.host, () => {
