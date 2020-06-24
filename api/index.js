@@ -34,6 +34,10 @@ function centroController(req, res) {
         })
 }
 
-app.listen(env.port, env.host, () => {
-    console.log("Listening at port:" + env.port)
+const setup = require("./db/setup")
+
+setup.bootstrap().then(() => {
+    app.listen(env.port, env.host, () => {
+        console.log("Listening at port:" + env.port)
+    })
 })
