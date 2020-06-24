@@ -5,6 +5,7 @@ const {
 } = require('../helpers/errors')
 const makeHttpError = require('../helpers/http-error')
 const makeCentro = require('./centro')
+const centro = require('./centro')
 
 module.exports = function makeCentroEndpointHandler({
     centroList
@@ -100,25 +101,60 @@ module.exports = function makeCentroEndpointHandler({
     }
 
     async function removeCentro(httpRequest) {
+        const {
+            id
+        } = httpRequest.pathParams || {}
+        const result = await centroList.remove(id)
         return {
             headers: {
                 'Content-Type': 'application/json'
             },
             statusCode: 200,
-            data: JSON.stringify({
-                "TODO": "Adicionar aqui o remove"
-            })
+            data: JSON.stringify(result)
         }
     }
 
     async function updateCentro(httpRequest) {
-        return {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            statusCode: 200,
-            data: JSON.stringify({
-                "TODO": "Adicionar aqui o update"
+        const {
+            id
+        } = httpRequest.pathParams || {}
+        let centroInfo = httpRequest.body
+        if (!centroInfo) {
+            return makeHttpError({
+                statusCode: 400,
+                errorMessage: 'Bad request. No PUT body'
+            })
+        }
+
+        if (typeof httpRequest.body == 'string') {
+            try {
+                centroInfo = JSON.parse(centroInfo)
+            } catch {
+                return makeHttpError({
+                    statusCode: 400,
+                    errorMessage: 'Bad request. PUT body must be valid JSON.'
+                })
+            }
+        }
+
+        try {
+            centroInfo.centroId = id
+            const result = await centroList.update(centroInfo)
+            return {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                statusCode: 200,
+                data: JSON.stringify(result)
+            }
+
+        } catch (e) {
+            return makeHttpError({
+                errorMessage: e.message,
+                statusCode: e instanceof UniqueConstraintError ?
+                    409 : e instanceof InvalidPropertyError ||
+                    e instanceof RequiredParameterError ?
+                    400 : 500
             })
         }
     }

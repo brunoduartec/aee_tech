@@ -3,6 +3,9 @@ const env = require('../env.json')
 
 const database = new Database(env.mysql).getInstance();
 
+const setup = require('./setup')
+exports.setup = setup.bootstrap
+
 module.exports = function makeDb() {
     return Object.freeze({
         add,
@@ -13,11 +16,14 @@ module.exports = function makeDb() {
         update
     })
 
-    async function add(table, params, values) {
+    async function add(table, values) {
+        let keysToAdd = Object.keys(values)
+        let valuesToAdd = Object.values(values)
+
         let query = "INSERT INTO " + table + "(";
 
-        for (let index = 0; index < params.length; index++) {
-            const param = params[index];
+        for (let index = 0; index < keysToAdd.length; index++) {
+            const param = keysToAdd[index];
             query += (param + ",")
         }
 
@@ -26,11 +32,8 @@ module.exports = function makeDb() {
 
         query += ") VALUES ("
 
-        let keysToAdd = Object.keys(values)
-        let valuesToAdd = Object.values(values)
-
-        for (let index = 0; index < keysToAdd.length; index++) {
-            const value = values[index];
+        for (let index = 0; index < valuesToAdd.length; index++) {
+            const value = valuesToAdd[index];
             query += "'" + value + "',"
         }
 
@@ -76,11 +79,26 @@ module.exports = function makeDb() {
         return await database.query(query);
     }
     async function replace(table, id, params, values) {
-
+        await remove(table, id)
+        await add(table, values)
     }
-    async function update(table, id, params, values) {
-        //TODO
-        let query = "UPDATE " + table + " SET Nome = '" + params.nome + "', Regional = '" + params.regional + "'  WHERE id = " + params.id;
+    async function update(table, id, values) {
+        let keysToAdd = Object.keys(values)
+        let valuesToAdd = Object.values(values)
+
+        let query = "UPDATE " + table + " SET";
+
+        for (let index = 0; index < keysToAdd.length; index++) {
+            const param = keysToAdd[index];
+            const value = valuesToAdd[index];
+
+            query += (" " + param + " = '" + value + "',")
+        }
+
+        //removes the last comma
+        query = query.substring(0, query.length - 1);
+
+        query += ("  WHERE id = " + id);
         return await database.query(query);
     }
 }
