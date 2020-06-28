@@ -1,11 +1,39 @@
 version: "3"
 
 services:
+    db:
+        image: mysql:5.7
+        volumes:
+          - "./.mysql-data/db:/var/lib/mysql"
+        restart: always
+        ports:
+          - "127.0.0.1:3306:3306"
+        expose:
+        - "3306"
+        environment:
+          MYSQL_ROOT_PASSWORD: aeepw
+          MYSQL_DATABASE: aee
+          MYSQL_USER: aee
+          MYSQL_PASSWORD: aeepw
+        networks:
+        - app-network
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
     app:
         build: .
         command: npm start
         container_name: app
         ports:
             - "3000:3000"
+            - 9229:9229
         volumes:
             - .:/usr/app
+        networks:
+            - app-network
+        depends_on:
+            - "db"
+networks:
+    app-network:
+        driver: bridge
