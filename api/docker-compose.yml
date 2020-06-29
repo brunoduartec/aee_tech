@@ -7,20 +7,22 @@ services:
           - "./.mysql-data/db:/var/lib/mysql"
         restart: always
         ports:
-          - "127.0.0.1:3306:3306"
+          - 3306:3306
         expose:
-        - "3306"
+          - 3306
         environment:
           MYSQL_ROOT_PASSWORD: aeepw
           MYSQL_DATABASE: aee
           MYSQL_USER: aee
           MYSQL_PASSWORD: aeepw
         networks:
-        - app-network
+            - app-network
     adminer:
         image: adminer
         ports:
             - 8080:8080
+        networks:
+            - app-network
     app:
         build: .
         command: npm start
