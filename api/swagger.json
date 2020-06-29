@@ -8,13 +8,114 @@
     "basePath": "/",
     "swagger": "2.0",
     "paths": {
-        "/centro": {
+        "/api/centro": {
             "get": {
-                "summary": "Retorna uma lista de centros."
+                "summary": "Retorna uma lista de centros.",
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Adiciona um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "List of user object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Centro"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+
+            }
+        },
+        "/api/centro/{id}": {
+            "get": {
+                "summary": "Retorna um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id do centro",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id do centro",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualiza um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do centro",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Campos de entrada do centro",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Centro"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         }
     },
-    "definitions": {},
+    "definitions": {
+        "Centro": {
+            "type": "object",
+            "required": ["nome", "regional", "membros"],
+            "properties": {
+                "nome": {
+                    "type": "string"
+                },
+                "regional": {
+                    "type": "string"
+                },
+                "membros": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
     "responses": {},
     "parameters": {},
     "securityDefinitions": {}
