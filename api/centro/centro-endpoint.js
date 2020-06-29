@@ -104,7 +104,9 @@ module.exports = function makeCentroEndpointHandler({
         const {
             id
         } = httpRequest.pathParams || {}
-        const result = await centroList.remove(id)
+        const result = await centroList.remove({
+            centroId: id
+        })
         return {
             headers: {
                 'Content-Type': 'application/json'

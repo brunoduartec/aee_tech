@@ -24,11 +24,11 @@ module.exports = function makeCentroList({
     async function findById({
         centroId
     }) {
-        const params = ["Nome", "Regional", "Membros"]
+        const params = ["ID", "Nome", "Regional", "Membros"]
         return await database.findById("Centro", centroId, params)
     }
     async function getItems() {
-        const params = ["Nome", "Regional", "Membros"]
+        const params = ["ID", "Nome", "Regional", "Membros"]
         return await database.getItems("Centro", params);
     }
     async function remove({
