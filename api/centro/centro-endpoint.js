@@ -34,7 +34,6 @@ module.exports = function makeCentroEndpointHandler({
         }
     }
 
-
     async function getCentros(httpRequest) {
         const {
             id
