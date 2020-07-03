@@ -102,17 +102,48 @@
     "definitions": {
         "Centro": {
             "type": "object",
-            "required": ["nome", "regional", "membros"],
+            "required": ["NOME_CENTRO", "ID_REGIONAL"],
             "properties": {
-                "nome": {
+                "NOME_CENTRO": {
                     "type": "string"
                 },
-                "regional": {
+                "CNPJ_CENTRO": {
                     "type": "string"
                 },
-                "membros": {
+                "DATA_FUNDACAO": {
+                    "type": "string"
+                },
+                "ID_REGIONAL": {
+                    "type": "string"
+                },
+                "ENDERECO": {
+                    "type": "string"
+                },
+                "NUMERO_ENDERECO": {
+                    "type": "integer"
+                },
+                "COMPLEMENTO": {
+                    "type": "string"
+                },
+                "CEP": {
+                    "type": "string"
+                },
+                "BAIRRO": {
+                    "type": "string"
+                },
+                "CIDADE": {
+                    "type": "string"
+                },
+                "ESTADO": {
+                    "type": "string"
+                },
+                "PAIS": {
+                    "type": "string"
+                },
+                "ID_PRESIDENTE": {
                     "type": "integer"
                 }
+
             }
         }
     },
