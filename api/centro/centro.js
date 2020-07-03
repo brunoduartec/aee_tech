@@ -1,4 +1,5 @@
 const requiredParam = require('../helpers/required-param')
+
 const {
     InvalidPropertyError
 } = require('../helpers/errors')
@@ -7,19 +8,29 @@ module.exports = function makeCentro(
     centroInfo = requiredParam('centroInfo')
 ) {
 
-    const validCentro = validate(centroInfo)
+    validate(centroInfo)
     const normalCentro = normalize(centroInfo)
     return Object.freeze(normalCentro)
 
     function validate({
-        nome = requiredParam('nome'),
-        regional = requiredParam('regional'),
+        NOME_CENTRO = requiredParam('NOME_CENTRO'),
+        ID_REGIONAL = requiredParam('ID_REGIONAL'),
+        CEP,
+        CNPJ_CENTRO,
+        ENDERECO,
         ...otherInfo
     } = {}) {
-        validateName('nome', nome)
+        validateName('NOME_CENTRO', NOME_CENTRO)
+        validateName('CEP', CEP)
+        validateName('CNPJ_CENTRO', CNPJ_CENTRO)
+        validateName('ENDERECO', ENDERECO)
+
         return {
-            nome,
-            regional,
+            NOME_CENTRO,
+            ID_REGIONAL,
+            CEP,
+            CNPJ_CENTRO,
+            ENDERECO,
             ...otherInfo
         }
     }
@@ -30,14 +41,19 @@ module.exports = function makeCentro(
         }
     }
 
+    function normalizeDate(date) {
+        let dateSplited = date.split("/")
+        return `${dateSplited[2]}-${dateSplited[1]}-${dateSplited[0]}`;
+    }
+
+    //metodo usado para caso queiramos deixa alguma coisa tudo minusculo por exemplo
     function normalize({
-        nome,
-        regional,
+        DATA_FUNDACAO,
         ...otherInfo
     }) {
+        DATA_FUNDACAO = normalizeDate(DATA_FUNDACAO)
         return {
-            nome,
-            regional,
+            DATA_FUNDACAO,
             ...otherInfo
         }
     }

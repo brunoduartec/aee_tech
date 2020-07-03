@@ -24,29 +24,37 @@ module.exports = function makeCentroList({
     async function findById({
         centroId
     }) {
-        const params = ["ID", "Nome", "Regional", "Membros"]
-        return await database.findById("Centro", centroId, params)
+        const params = ["ID_CENTRO", "NOME_CENTRO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
+        return await database.findById("Centro", params, {
+            ID_CENTRO: centroId
+        })
     }
     async function getItems() {
-        const params = ["ID", "Nome", "Regional", "Membros"]
+        const params = ["ID_CENTRO", "NOME_CENTRO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
         return await database.getItems("Centro", params);
     }
     async function remove({
         centroId
     }) {
-        return await database.remove("Centro", centroId)
+        return await database.remove("Centro", {
+            ID_CENTRO: centroId
+        })
     }
     async function replace({
         centroId,
         ...centro
     }) {
-        return await database.replace("Centro", centroId, centro)
+        return await database.replace("Centro", centro, {
+            ID_CENTRO: centroId
+        })
     }
     async function update({
         centroId,
         ...centro
     }) {
-        return await database.update("Centro", centroId, centro)
+        return await database.update("Centro", centro, {
+            ID_CENTRO: centroId
+        })
     }
 
 }
