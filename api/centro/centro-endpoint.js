@@ -5,7 +5,6 @@ const {
 } = require('../helpers/errors')
 const makeHttpError = require('../helpers/http-error')
 const makeCentro = require('./centro')
-const centro = require('./centro')
 
 module.exports = function makeCentroEndpointHandler({
     centroList
