@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CentroServiceService } from "../centro-service.service";
+import { CentroServiceService } from "./centro-service.service";
 
 @Component({
   selector: 'app-centro-list',
@@ -12,7 +12,7 @@ export class CentroListComponent implements OnInit {
   constructor(private svc: CentroServiceService) { }
 
   ngOnInit(): void {
-    this.svc.getAllCentros().subscribe(data => {
+    this.svc.getAllCentros().then(data => {
       this.centroData = data;
     });
   }

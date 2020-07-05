@@ -8,8 +8,17 @@ import { Observable } from "rxjs/Observable";
 export class CentroServiceService {
   constructor(private http: HttpClient) { }
 
-  getAllCentros(): Observable<any> {
-    return this.http.get<any>('https://super-crud.herokuapp.com/pokemon')
+  getAllCentros(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.get<any>('http://localhost:3000/api/centro/')
+        .subscribe((a) => {
+          resolve(a);
+        }, () => {
+
+        })
+    })
+
+
   }
 
 }
