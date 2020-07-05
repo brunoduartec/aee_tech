@@ -1,13 +1,21 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const env = require('./env.json')
 
 const swaggerDoc = require('./helpers/swaggerDoc')
 
 const handleCentroRequest = require('./centro')
 const adaptRequest = require('./helpers/adapt-request')
-
 const app = express();
+
+
+var corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+app.use(cors(corsOptions))
+
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
@@ -18,6 +26,7 @@ app.get('/', function (req, res) {
 app.all('/api/centro', centroController)
 
 app.use('/api/centro/:id', centroController);
+
 
 swaggerDoc(app);
 
@@ -42,8 +51,8 @@ function centroController(req, res) {
 
 const setup = require("./db/setup")
 
-setup.bootstrap().then(() => {
-    app.listen(env.port, env.host, () => {
-        console.log("Listening at port:" + env.port)
-    })
-});
+// setup.bootstrap().then(() => {
+app.listen(env.port, env.host, () => {
+    console.log("Listening at port:" + env.port)
+})
+// });
