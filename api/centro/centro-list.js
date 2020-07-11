@@ -17,8 +17,19 @@ module.exports = function makeCentroList({
 
     async function add({
         centroId,
+        NOME_REGIONAL,
         ...centro
     }) {
+
+        if (NOME_REGIONAL) {
+            const params = ["ID_REGIONAL"]
+            const idRegional = await database.findById("Regional", params, {
+                NOME_REGIONAL: NOME_REGIONAL
+            })
+
+            centro.ID_REGIONAL = idRegional[0].ID_REGIONAL
+        }
+
         return await database.add("Centro", centro)
     }
     async function findById({
