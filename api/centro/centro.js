@@ -14,7 +14,6 @@ module.exports = function makeCentro(
 
     function validate({
         NOME_CENTRO = requiredParam('NOME_CENTRO'),
-        ID_REGIONAL = requiredParam('ID_REGIONAL'),
         CEP,
         CNPJ_CENTRO,
         ENDERECO,
@@ -27,7 +26,6 @@ module.exports = function makeCentro(
 
         return {
             NOME_CENTRO,
-            ID_REGIONAL,
             CEP,
             CNPJ_CENTRO,
             ENDERECO,
