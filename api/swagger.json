@@ -97,6 +97,98 @@
                     }
                 }
             }
+        },
+
+
+        "/api/regional": {
+            "get": {
+                "summary": "Retorna uma lista de regionais.",
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Adiciona uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "List of user object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Regional"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+
+            }
+        },
+        "/api/regional/{id}": {
+            "get": {
+                "summary": "Retorna uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id da regional",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id da regional",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualiza uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id da regional",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Campos de entrada da regional",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Regional"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -144,6 +236,21 @@
                     "type": "integer"
                 }
 
+            }
+        },
+        "Regional": {
+            "type": "object",
+            "required": ["NOME_REGIONAL"],
+            "properties": {
+                "NOME_REGIONAL": {
+                    "type": "string"
+                },
+                "ESTADO": {
+                    "type": "string"
+                },
+                "PAIS": {
+                    "type": "string"
+                }
             }
         }
     },
