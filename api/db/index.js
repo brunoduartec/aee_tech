@@ -24,7 +24,13 @@ module.exports = function makeDb() {
         for (let index = 0; index < conditionKeysToAdd.length; index++) {
             const param = conditionKeysToAdd[index];
             const condition = conditionValuesToAdd[index];
-            query += (param + "= " + condition)
+
+            const typeOfCondition = typeof condition;
+            if (typeOfCondition == "string") {
+                query += (param + "= '" + condition + "'")
+            } else {
+                query += (param + "= " + condition)
+            }
         }
 
         return query
@@ -76,8 +82,9 @@ module.exports = function makeDb() {
         query += (" From " + table + " WHERE ")
 
         query += (setConditionQueryPart(conditions));
+        let ret = await database.query(query);
 
-        return await database.query(query);
+        return ret
     }
     async function getItems(table, params) {
         let query = 'SELECT ';
