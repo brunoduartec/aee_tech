@@ -1,85 +1,40 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const env = require('./env.json')
+const cluster = require("cluster")
+const proc = require("proc")
+const http = require("http");
 
-const swaggerDoc = require('./helpers/swaggerDoc')
+const api = require("./api")();
 
-const handleCentroRequest = require('./centro')
-const handleRegionalRequest = require('./regional')
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
+const config = require('./env.json')[env]
 
+const port = config.port;
 
-const adaptRequest = require('./helpers/adapt-request')
-const app = express();
-
-
-var corsOptions = {
-    origin: 'http://localhost:4200',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
-}
-app.use(cors(corsOptions))
-
-app.use(bodyParser.json());
-
-app.get('/', function (req, res) {
-    res.send("Hello World doidão");
-});
-
-
-app.all('/api/centro', centroController)
-app.use('/api/centro/:id', centroController);
-
-app.all('/api/regional', regionalController)
-app.use('/api/regional/:id', regionalController);
-
-
-swaggerDoc(app);
-
-function centroController(req, res) {
-    const httpRequest = adaptRequest(req)
-    handleCentroRequest(httpRequest)
-        .then(({
-            headers,
-            statusCode,
-            data
-        }) => {
-            res
-                .set(headers)
-                .status(statusCode)
-                .send(data)
-        })
-        .catch(e => {
-            console.log(e);
-            res.status(500).end()
-        })
+if (cluster.isMaster) {
+    createMasterNode(cluster)
+} else {
+    createSlaveNode();
 }
 
 
-function regionalController(req, res) {
-    const httpRequest = adaptRequest(req)
-    handleRegionalRequest(httpRequest)
-        .then(({
-            headers,
-            statusCode,
-            data
-        }) => {
-            res
-                .set(headers)
-                .status(statusCode)
-                .send(data)
-        })
-        .catch(e => {
-            console.log(e);
-            res.status(500).end()
-        })
+function createMasterNode(cluster) {
+    for (let i = 0; i < require("os").cpus().length; i++) {
+        cluster.fork();
+    }
+
+    console.log("Cluster " + proc.pid + " is online");
+    cluster.on("online", function (worker) {
+        console.log("Worker " + worker.process.pid + " is online")
+    })
+    cluster.on("exit", function (worker, code, signal) {
+        console.log("worker " + worker.process.pid + " died.")
+    })
 }
 
+function createSlaveNode() {
+    let server_http = http.Server(api);
+    server_http.listen(port, "0.0.0.0", function () {
+        console.log("API is running on port: " + port)
+    })
 
 
-const setup = require("./db/setup")
-
-// setup.bootstrap().then(() => {
-app.listen(env.port, env.host, () => {
-    console.log("Listening at port:" + env.port)
-})
-// });
+}

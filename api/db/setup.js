@@ -1,7 +1,9 @@
 const Database = require('../helpers/Database')
-const env = require('../env.json')
 
-const database = new Database(env.mysql).getInstance();
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
+const config = require('../env.json')[env]
+
+const database = new Database(config.mysql).getInstance();
 
 async function createCentro() {
     console.log("Creating Table Centro");
