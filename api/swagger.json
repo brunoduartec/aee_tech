@@ -1,14 +1,14 @@
 {
     "info": {
-        "title": "Node Swagger API",
+        "title": "Aliança Digital",
         "version": "1.0.0",
-        "description": "Demonstrating how to describe a RESTful API with Swagger"
+        "description": "Api do Aliança Digital"
     },
     "host": "localhost:3000",
     "basePath": "/",
     "swagger": "2.0",
     "paths": {
-        "/api/centro": {
+        "/api/v1/centros": {
             "get": {
                 "summary": "Retorna uma lista de centros.",
                 "produces": ["application/json", "application/xml"],
@@ -38,7 +38,7 @@
 
             }
         },
-        "/api/centro/{id}": {
+        "/api/v1/centros/{id}": {
             "get": {
                 "summary": "Retorna um centro dado o id",
                 "produces": ["application/json", "application/xml"],
@@ -98,9 +98,7 @@
                 }
             }
         },
-
-
-        "/api/regional": {
+        "/api/v1/regionsais": {
             "get": {
                 "summary": "Retorna uma lista de regionais.",
                 "produces": ["application/json", "application/xml"],
@@ -130,7 +128,7 @@
 
             }
         },
-        "/api/regional/{id}": {
+        "/api/v1/regionsais/{id}": {
             "get": {
                 "summary": "Retorna uma regional dado o id",
                 "produces": ["application/json", "application/xml"],
