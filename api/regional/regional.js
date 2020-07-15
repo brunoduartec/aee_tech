@@ -14,17 +14,14 @@ module.exports = function makeRegional(
 
     function validate({
         NOME_REGIONAL = requiredParam('NOME_REGIONAL'),
-        ESTADO,
         PAIS,
         ...otherInfo
     } = {}) {
         validateName('NOME_REGIONAL', NOME_REGIONAL)
-        validateName('ESTADO', ESTADO)
         validateName('PAIS', PAIS)
 
         return {
             NOME_REGIONAL,
-            ESTADO,
             PAIS,
             ...otherInfo
         }
@@ -39,13 +36,11 @@ module.exports = function makeRegional(
     //metodo usado para caso queiramos deixa alguma coisa tudo minusculo por exemplo
     function normalize({
         NOME_REGIONAL,
-        ESTADO,
         PAIS,
         ...otherInfo
     }) {
         return {
             NOME_REGIONAL,
-            ESTADO,
             PAIS,
             ...otherInfo
         }
