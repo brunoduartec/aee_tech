@@ -1,0 +1,258 @@
+{
+    "info": {
+        "title": "Aliança Digital",
+        "version": "1.0.0",
+        "description": "Api do Aliança Digital"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "swagger": "2.0",
+    "paths": {
+        "/api/v1/centros": {
+            "get": {
+                "summary": "Retorna uma lista de centros.",
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Adiciona um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "List of user object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Centro"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+
+            }
+        },
+        "/api/v1/centros/{id}": {
+            "get": {
+                "summary": "Retorna um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id do centro",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id do centro",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualiza um centro dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do centro",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Campos de entrada do centro",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Centro"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/regionsais": {
+            "get": {
+                "summary": "Retorna uma lista de regionais.",
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Adiciona uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "List of user object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Regional"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+
+            }
+        },
+        "/api/v1/regionsais/{id}": {
+            "get": {
+                "summary": "Retorna uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id da regional",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id da regional",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualiza uma regional dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id da regional",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Campos de entrada da regional",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Regional"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Centro": {
+            "type": "object",
+            "required": ["NOME_CENTRO", "ID_REGIONAL"],
+            "properties": {
+                "NOME_CENTRO": {
+                    "type": "string"
+                },
+                "CNPJ_CENTRO": {
+                    "type": "string"
+                },
+                "DATA_FUNDACAO": {
+                    "type": "string"
+                },
+                "ID_REGIONAL": {
+                    "type": "string"
+                },
+                "ENDERECO": {
+                    "type": "string"
+                },
+                "NUMERO_ENDERECO": {
+                    "type": "integer"
+                },
+                "COMPLEMENTO": {
+                    "type": "string"
+                },
+                "CEP": {
+                    "type": "string"
+                },
+                "BAIRRO": {
+                    "type": "string"
+                },
+                "CIDADE": {
+                    "type": "string"
+                },
+                "ESTADO": {
+                    "type": "string"
+                },
+                "PAIS": {
+                    "type": "string"
+                },
+                "ID_PRESIDENTE": {
+                    "type": "integer"
+                }
+
+            }
+        },
+        "Regional": {
+            "type": "object",
+            "required": ["NOME_REGIONAL"],
+            "properties": {
+                "NOME_REGIONAL": {
+                    "type": "string"
+                },
+                "ESTADO": {
+                    "type": "string"
+                },
+                "PAIS": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "responses": {},
+    "parameters": {},
+    "securityDefinitions": {}
+}
