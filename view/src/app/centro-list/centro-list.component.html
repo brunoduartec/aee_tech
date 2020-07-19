@@ -29,26 +29,18 @@
         <tr>
           <th>Nome</th>
           <th>Endereço</th>
-          <th>Numero</th>
-          <th>Complemento</th>
           <th>Bairro</th>
           <th>CEP</th>
           <th>Cidade</th>
-          <th>Estado</th>
-          <th>Pais</th>
           <th>CNPJ</th>
           <th>Data de Fundação</th>
         </tr>
         <tr *ngFor="let centro of centroData">
           <td>{{centro.NOME_CENTRO}} </td>
           <td>{{centro.ENDERECO}} </td>
-          <td>{{centro.NUMERO_ENDERECO}} </td>
-          <td>{{centro.COMPLEMENTO}} </td>
           <td>{{centro.BAIRRO}} </td>
           <td>{{centro.CEP}} </td>
           <td>{{centro.CIDADE}} </td>
-          <td>{{centro.ESTADO}} </td>
-          <td>{{centro.PAIS}} </td>
           <td>{{centro.CNPJ_CENTRO}} </td>
           <td>{{centro.DATA_FUNDACAO}} </td>
         </tr>
