@@ -4,8 +4,7 @@
 		"name": "AEE",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
-	"item": [
-		{
+	"item": [{
 			"name": "Add Centro",
 			"request": {
 				"method": "POST",
@@ -20,10 +19,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/centro",
+					"raw": "http://127.0.0.1:3000/api/centro",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "3000",
 					"path": [
@@ -52,10 +51,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/centro",
+					"raw": "http://127.0.0.1:3000/api/centro",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "3000",
 					"path": [
@@ -81,10 +80,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/centro/10",
+					"raw": "http://127.0.0.1:3000/api/centro/10",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "3000",
 					"path": [
@@ -111,10 +110,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/centro/8",
+					"raw": "http://127.0.0.1:3000/api/centro/8",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "3000",
 					"path": [
@@ -127,8 +126,7 @@
 			"response": []
 		}
 	],
-	"event": [
-		{
+	"event": [{
 			"listen": "prerequest",
 			"script": {
 				"id": "df974084-6885-477d-96f6-2bb060fbf88b",
