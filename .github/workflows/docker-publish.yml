@@ -48,6 +48,10 @@ jobs:
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
+      - name: Tag Image
+        run: |
+          docker tag aee_tech_app brunoduartec/api_app
+
       - name: Push image
         run: |
           docker push brunoduartec/api_app
