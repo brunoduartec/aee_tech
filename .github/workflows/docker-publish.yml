@@ -30,6 +30,7 @@ jobs:
         run: |
             docker-compose build
 
+
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
@@ -47,11 +48,19 @@ jobs:
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-      
-      - name: Tag Image
-        run: |
-          docker tag aee_tech_app brunoduartec/api_app
 
       - name: Push image
         run: |
-          docker push brunoduartec/api_app
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo VERSION=$VERSION
+
+          docker tag aee_tech_app $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
