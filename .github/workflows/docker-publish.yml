@@ -46,11 +46,10 @@ jobs:
       - name: Build image
         run: docker-compose build
 
-      #- name: Log into registry
-        #run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
         
       - name: Push image
         run: |
-          winpty docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          winpty docker tag aee_tech_app $IMAGE_NAME
-          winpty docker push $IMAGE_NAME
+          docker tag aee_tech_app $IMAGE_NAME
+          docker push $IMAGE_NAME
