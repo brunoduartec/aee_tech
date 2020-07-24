@@ -51,6 +51,6 @@ jobs:
         
       - name: Push image
         run: |
-          docker login docker.io
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker tag aee_tech_app $IMAGE_NAME
           docker push $IMAGE_NAME
