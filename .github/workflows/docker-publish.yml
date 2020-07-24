@@ -48,8 +48,7 @@ jobs:
           docker-compose build
           
       - name: Docker Login
-        run: |
-          docker login -u brunoduartec
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.pkg.github.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
                 
       - name: Push image
         run: |
