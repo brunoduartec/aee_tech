@@ -47,8 +47,12 @@ jobs:
         run: |
           docker-compose build
           
-      - name: Log into registry
-        run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - name: Docker Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: docker.pkg.github.com
+          username: $GITHUB_ACTOR
+          password: ${{ secrets.GITHUB_TOKEN }}
                 
       - name: Push image
         run: |
