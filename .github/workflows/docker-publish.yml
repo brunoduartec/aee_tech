@@ -51,5 +51,5 @@ jobs:
         
       - name: Push image
         run: |
-          docker tag aee_tech_app $IMAGE_NAME
-          docker push $IMAGE_NAME
+          docker tag aee_tech_app brunoduartec/api_app
+          docker push brunoduartec/api_app
