@@ -46,7 +46,7 @@ jobs:
         run: docker-compose build
 
       - name: Log into registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.pkg.github.com --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.pkg.github.com --username brunoduartec --password-stdin
 
       - name: Tag Image
         run: |
