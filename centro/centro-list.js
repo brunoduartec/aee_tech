@@ -30,24 +30,24 @@ module.exports = function makeCentroList({
             centro.ID_REGIONAL = idRegional[0].ID_REGIONAL
         }
 
-        return await database.add("Centro", centro)
+        return await database.add("CENTRO", centro)
     }
     async function findById({
         centroId
     }) {
         const params = ["ID_CENTRO", "NOME_CENTRO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
-        return await database.findById("Centro", params, {
+        return await database.findById("CENTRO", params, {
             ID_CENTRO: centroId
         })
     }
     async function getItems() {
         const params = ["ID_CENTRO", "NOME_CENTRO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
-        return await database.getItems("Centro", params);
+        return await database.getItems("CENTRO", params);
     }
     async function remove({
         centroId
     }) {
-        return await database.remove("Centro", {
+        return await database.remove("CENTRO", {
             ID_CENTRO: centroId
         })
     }
@@ -55,7 +55,7 @@ module.exports = function makeCentroList({
         centroId,
         ...centro
     }) {
-        return await database.replace("Centro", centro, {
+        return await database.replace("CENTRO", centro, {
             ID_CENTRO: centroId
         })
     }
@@ -63,7 +63,7 @@ module.exports = function makeCentroList({
         centroId,
         ...centro
     }) {
-        return await database.update("Centro", centro, {
+        return await database.update("CENTRO", centro, {
             ID_CENTRO: centroId
         })
     }
