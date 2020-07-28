@@ -23,7 +23,7 @@ module.exports = function makeCentroList({
 
         if (NOME_REGIONAL) {
             const params = ["ID_REGIONAL"]
-            const idRegional = await database.findById("Regional", params, {
+            const idRegional = await database.findById("REGIONAL", params, {
                 NOME_REGIONAL: NOME_REGIONAL
             })
 
