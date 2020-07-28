@@ -19,24 +19,24 @@ module.exports = function makeRegionalList({
         regionalId,
         ...regional
     }) {
-        return await database.add("Regional", regional)
+        return await database.add("REGIONAL", regional)
     }
     async function findById({
         regionalId
     }) {
         const params = ["ID_REGIONAL", "NOME_REGIONAL", "ESTADO", "PAIS"]
-        return await database.findById("Regional", params, {
+        return await database.findById("REGIONAL", params, {
             ID_REGIONAL: regionalId
         })
     }
     async function getItems() {
         const params = ["ID_REGIONAL", "NOME_REGIONAL", "ESTADO", "PAIS"]
-        return await database.getItems("Regional", params);
+        return await database.getItems("REGIONAL", params);
     }
     async function remove({
         regionalId
     }) {
-        return await database.remove("Regional", {
+        return await database.remove("REGIONAL", {
             ID_REGIONAL: regionalId
         })
     }
@@ -44,7 +44,7 @@ module.exports = function makeRegionalList({
         regionalId,
         ...regional
     }) {
-        return await database.replace("Regional", regional, {
+        return await database.replace("REGIONAL", regional, {
             ID_REGIONAL: regionalId
         })
     }
@@ -52,7 +52,7 @@ module.exports = function makeRegionalList({
         regionalId,
         ...regional
     }) {
-        return await database.update("Regional", regional, {
+        return await database.update("REGIONAL", regional, {
             ID_REGIONAL: regionalId
         })
     }
