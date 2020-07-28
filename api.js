@@ -86,8 +86,6 @@ function regionalController(req, res) {
 
 const setup = require("./db/setup")
 
-// setup.bootstrap().then(() => {
 module.exports = function () {
     return app;
 }
-// });
