@@ -47,6 +47,10 @@ function centroController(req, res) {
             statusCode,
             data
         }) => {
+            console.log("--------: " + statusCode)
+            console.log(data)
+            console.log("---------")
+
             res
                 .set(headers)
                 .status(statusCode)
