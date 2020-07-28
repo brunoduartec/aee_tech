@@ -22,6 +22,9 @@ app.use(cors(corsOptions))
 
 app.use(bodyParser.json());
 
+// app.js: register the route. In our case, we don't want authorization for this route
+app.use('/api/v1/healthcheck', require('./healthcheck'));
+
 app.get('/', function (req, res) {
     res.send("Hello World doidão");
 });
@@ -44,6 +47,10 @@ function centroController(req, res) {
             statusCode,
             data
         }) => {
+            console.log("--------: " + statusCode)
+            console.log(data)
+            console.log("---------")
+
             res
                 .set(headers)
                 .status(statusCode)
@@ -79,8 +86,6 @@ function regionalController(req, res) {
 
 const setup = require("./db/setup")
 
-// setup.bootstrap().then(() => {
 module.exports = function () {
     return app;
 }
-// });

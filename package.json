@@ -1,8 +1,12 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Api backend Aliança",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brunoduartec/aee_tech.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --inspect=0.0.0.0 supervisor.js"
