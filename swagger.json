@@ -98,7 +98,7 @@
                 }
             }
         },
-        "/api/v1/regionsais": {
+        "/api/v1/regionais": {
             "get": {
                 "summary": "Retorna uma lista de regionais.",
                 "produces": ["application/json", "application/xml"],
@@ -128,7 +128,7 @@
 
             }
         },
-        "/api/v1/regionsais/{id}": {
+        "/api/v1/regionais/{id}": {
             "get": {
                 "summary": "Retorna uma regional dado o id",
                 "produces": ["application/json", "application/xml"],
