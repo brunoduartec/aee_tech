@@ -14,15 +14,27 @@ const handleRegionalRequest = require('./regional')
 const adaptRequest = require('./helpers/adapt-request')
 const app = express();
 
-app.use(cors())
+
+app.use((req, res, next) => {
+    console.log("Acessou o Middleware!");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+    app.use(cors());
+    next();
+});
 
 app.use(bodyParser.json());
 
-// app.js: register the route. In our case, we don't want authorization for this route
 app.use('/api/v1/healthcheck', require('./healthcheck'));
 
 app.get('/', function (req, res) {
-    res.send("Hello World doidão");
+    const package = require('./package.json')
+    const versionInfo = {
+        name: package.name,
+        version: package.version,
+        description: package.description
+    }
+    res.json(versionInfo)
 });
 
 
@@ -80,7 +92,10 @@ function regionalController(req, res) {
 
 
 
-const setup = require("./db/setup")
+const setup = require("./db/setup");
+const {
+    version
+} = require('mongoose');
 
 module.exports = function () {
     return app;
