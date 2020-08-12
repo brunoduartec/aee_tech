@@ -187,6 +187,96 @@
                     }
                 }
             }
+        },
+        "/api/v1/atividades": {
+            "get": {
+                "summary": "Retorna uma lista de atividades.",
+                "produces": ["application/json", "application/xml"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Adiciona uma atividade dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "List of atividade object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/Atividade"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+
+            }
+        },
+        "/api/v1/atividades/{id}": {
+            "get": {
+                "summary": "Retorna uma atividade dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id da atividade",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove uma atividade dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id da atividade",
+                    "required": true,
+                    "type": "integer"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualiza uma atividade dado o id",
+                "produces": ["application/json", "application/xml"],
+                "parameters": [{
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id da atividade",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Campos de entrada da atividade",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Atividade"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -247,6 +337,15 @@
                     "type": "string"
                 },
                 "PAIS": {
+                    "type": "string"
+                }
+            }
+        },
+        "Atividade": {
+            "type": "object",
+            "required": ["NOME_ATIVIDADE"],
+            "properties": {
+                "NOME_ATIVIDADE": {
                     "type": "string"
                 }
             }

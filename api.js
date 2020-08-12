@@ -3,12 +3,12 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
-const config = require('./env.json')[env]
 
 const swaggerDoc = require('./helpers/swaggerDoc')
 
-const handleCentroRequest = require('./centro')
-const handleRegionalRequest = require('./regional')
+const handleCentroRequest = require('./centros')
+const handleRegionalRequest = require('./regionais')
+const handleAtividadeRequest = require('./atividades')
 
 
 const adaptRequest = require('./helpers/adapt-request')
@@ -44,6 +44,8 @@ app.use('/api/v1/centros/:id', centroController);
 app.all('/api/v1/regionais', regionalController)
 app.use('/api/v1/regionais/:id', regionalController);
 
+app.all('/api/v1/atividades', atividadeController)
+app.use('/api/v1/atividades/:id', atividadeController);
 
 swaggerDoc(app);
 
@@ -55,10 +57,6 @@ function centroController(req, res) {
             statusCode,
             data
         }) => {
-            console.log("--------: " + statusCode)
-            console.log(data)
-            console.log("---------")
-
             res
                 .set(headers)
                 .status(statusCode)
@@ -90,7 +88,24 @@ function regionalController(req, res) {
         })
 }
 
-
+function atividadeController(req, res) {
+    const httpRequest = adaptRequest(req)
+    handleAtividadeRequest(httpRequest)
+        .then(({
+            headers,
+            statusCode,
+            data
+        }) => {
+            res
+                .set(headers)
+                .status(statusCode)
+                .send(data)
+        })
+        .catch(e => {
+            console.log(e);
+            res.status(500).end()
+        })
+}
 
 const setup = require("./db/setup");
 const {
