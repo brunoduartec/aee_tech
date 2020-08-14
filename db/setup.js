@@ -5,60 +5,25 @@ const config = require('../env.json')[env]
 
 const database = new Database(config.mysql).getInstance();
 
-async function createCentro() {
-    console.log("Creating Table Centro");
+const fs = require('fs');
+const util = require('util');
 
-    const sql =
-        "CREATE TABLE IF NOT EXISTS CENTRO ( \n" +
-        "ID_CENTRO INT NOT NULL AUTO_INCREMENT,\n" +
-        "NOME_CENTRO VARCHAR(100) NOT NULL, \n" +
-        "CNPJ_CENTRO VARCHAR(14),\n" +
-        "DATA_FUNDACAO DATE,\n" +
-        "ID_REGIONAL VARCHAR(100), \n" +
-        "ENDERECO VARCHAR(100), \n" +
-        "NUMERO_ENDERECO INT, \n" +
-        "COMPLEMENTO VARCHAR(30), \n" +
-        "CEP VARCHAR(10), \n" +
-        "BAIRRO VARCHAR(30),\n" +
-        "CIDADE VARCHAR(50),\n" +
-        "ESTADO VARCHAR(30),\n" +
-        "PAIS VARCHAR(30),\n" +
-        "ID_PRESIDENTE INT,\n" +
-        "PRIMARY KEY (ID_CENTRO)\n" +
-        ");";
+// Convert fs.readFile into Promise version of same    
+const readFile = util.promisify(fs.readFile);
 
-    database.query(sql, function (error, results, fields) {
-        if (error) {
-            return console.log(error);
-        } else {
-            console.log('Tabela Centro Criada com sucesso');
-        }
-    });
-}
-
-async function createRegional() {
-    console.log("Creating Table Regional");
-
-    const sql =
-        "CREATE TABLE IF NOT EXISTS REGIONAL ( \n" +
-        "ID_REGIONAL INT NOT NULL AUTO_INCREMENT, \n" +
-        "NOME_REGIONAL VARCHAR(100) NOT NULL, \n" +
-        "ESTADO VARCHAR(100),\n" +
-        "PAIS VARCHAR(100)," +
-        "PRIMARY KEY (ID_REGIONAL)\n" +
-        ");";
-
-    database.query(sql, function (error, results, fields) {
-        if (error) {
-            return console.log(error);
-        } else {
-            console.log('Tabela Regional Criada com sucesso');
-        }
-    });
-}
-
-
-exports.bootstrap = async function () {
-    await createCentro();
-    await createRegional();
+module.exports = async function bootstrap() {
+    fs = require('fs')
+    readFile('../Banco Alianca.sql')
+        .then(data => {
+            database.query(data)
+                .then(data => {
+                    console.log('Tabelas Criadas com sucesso');
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }

@@ -1,9 +1,9 @@
-const makeCentro = require('./atividade')
+const makeAtividade = require('./atividade')
 const {
     UniqueConstraintError
 } = require('../helpers/errors')
 
-module.exports = function makeCentroList({
+module.exports = function makeAtividadeList({
     database
 }) {
     return Object.freeze({
