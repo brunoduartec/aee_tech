@@ -38,11 +38,20 @@ module.exports = function makeCentroEndpointHandler({
             id
         } = httpRequest.pathParams || {}
         const {
-            max
+            max,
+            searchParam,
+            searchValue
         } = httpRequest.queryParams || {}
 
-        const result = id ? await centroList.findById({
-            centroId: id
+        let hasQuery = function (id, searchParam, searchValue) {
+            return id || (searchParam && searchValue)
+        }
+
+        const result = hasQuery(id, searchParam, searchValue) ? await centroList.findById({
+            centroId: id,
+            max,
+            searchParam,
+            searchValue
         }) : await centroList.getItems({
             max
         })

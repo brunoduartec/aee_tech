@@ -71,7 +71,7 @@ module.exports = function makeDb() {
 
         return await database.query(query);
     }
-    async function findById(table, params, conditions) {
+    async function findById(table, params, conditions, max, searchParam, searchValue) {
         let query = 'SELECT ';
 
         for (let index = 0; index < params.length; index++) {
@@ -83,12 +83,16 @@ module.exports = function makeDb() {
         query = query.substring(0, query.length - 1);
         query += (" From " + table + " WHERE ")
 
-        query += (setConditionQueryPart(conditions));
+        if (searchParam) {
+            query += `${searchParam} LIKE '%${searchValue}%';`
+        } else {
+            query += (setConditionQueryPart(conditions));
+        }
         let ret = await database.query(query);
 
         return ret
     }
-    async function getItems(table, params) {
+    async function getItems(table, params, max, search) {
         let query = 'SELECT ';
 
         for (let index = 0; index < params.length; index++) {
