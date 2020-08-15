@@ -33,16 +33,21 @@ module.exports = function makeCentroList({
         return await database.add("CENTRO", centro)
     }
     async function findById({
-        centroId
+        centroId,
+        max,
+        searchParam,
+        searchValue
     }) {
         const params = ["ID_CENTRO", "NOME_CENTRO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
         return await database.findById("CENTRO", params, {
             ID_CENTRO: centroId
-        })
+        }, max, searchParam, searchValue)
     }
-    async function getItems() {
+    async function getItems({
+        max
+    }) {
         const params = ["ID_CENTRO", "NOME_CENTRO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
-        return await database.getItems("CENTRO", params);
+        return await database.getItems("CENTRO", params, max);
     }
     async function remove({
         centroId

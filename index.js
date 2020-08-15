@@ -17,9 +17,9 @@ if (cluster.isMaster) {
 
 
 function createMasterNode(cluster) {
-    for (let i = 0; i < require("os").cpus().length; i++) {
-        cluster.fork();
-    }
+    // for (let i = 0; i < require("os").cpus().length; i++) {
+    cluster.fork();
+    // }
 
     console.log("Cluster " + proc.pid + " is online");
     cluster.on("online", function (worker) {
