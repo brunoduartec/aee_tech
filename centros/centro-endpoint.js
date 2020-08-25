@@ -47,6 +47,8 @@ module.exports = function makeCentroEndpointHandler({
             return id || (searchParam && searchValue)
         }
 
+        searchParam = convertSearchParam(searchParam);
+
         const result = hasQuery(id, searchParam, searchValue) ? await centroList.findById({
             centroId: id,
             max,
@@ -166,6 +168,25 @@ module.exports = function makeCentroEndpointHandler({
                     400 : 500
             })
         }
+    }
+
+    function convertSearchParam(searchParam) {
+        switch(searchParam){
+            case(1):
+                return "NOME_CENTRO";
+            case(2):
+                return "ID_REGIONAL"
+            case(3):
+                return "ENDERECO";
+            case(4):
+                return "CIDADE";
+            case(5):
+                return "ESTADO"
+            case(6):
+                return "PAIS"
+            default:
+                return null;
+        };
     }
 
 }
