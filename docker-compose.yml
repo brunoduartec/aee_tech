@@ -26,6 +26,7 @@ services:
     app:
         build: .
         command: npm start
+        image: aee_tech_api
         container_name: app
         ports:
             - "3000:3000"
