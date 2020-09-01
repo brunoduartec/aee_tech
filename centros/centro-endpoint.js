@@ -48,6 +48,7 @@ module.exports = function makeCentroEndpointHandler({
         }
 
         if (searchParam) {
+            searchParam = Number(searchParam)
             searchParam = convertSearchParam(searchParam);
         }
 
