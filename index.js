@@ -32,7 +32,7 @@ function createMasterNode(cluster) {
 
 function createSlaveNode() {
     let server_http = http.Server(api);
-    server_http.listen(port, "127.0.0.1", function () {
+    server_http.listen(port, function () {
         console.log("API is running on port: " + port)
     })
 
