@@ -14,21 +14,21 @@ module.exports = function makeCentro(
 
     function validate({
         NOME_CENTRO = requiredParam('NOME_CENTRO'),
-        NOME_CURTO_CENTRO = requiredParam('NOME_CURTO_CENTRO'),
+        NOME_CURTO = requiredParam('NOME_CURTO'),
         CEP,
         CNPJ_CENTRO,
         ENDERECO,
         ...otherInfo
     } = {}) {
         validateName('NOME_CENTRO', NOME_CENTRO)
-        validateName('NOME_CURTO_CENTRO', NOME_CURTO_CENTRO)
+        validateName('NOME_CURTO', NOME_CURTO)
         validateName('CEP', CEP)
         validateName('CNPJ_CENTRO', CNPJ_CENTRO)
         validateName('ENDERECO', ENDERECO)
 
         return {
             NOME_CENTRO,
-            NOME_CURTO_CENTRO,
+            NOME_CURTO,
             CEP,
             CNPJ_CENTRO,
             ENDERECO,
