@@ -372,9 +372,12 @@
     "definitions": {
         "Centro": {
             "type": "object",
-            "required": ["NOME_CENTRO", "ID_REGIONAL"],
+            "required": ["NOME_CENTRO", "NOME_CURTO", "ID_REGIONAL"],
             "properties": {
                 "NOME_CENTRO": {
+                    "type": "string"
+                },
+                "NOME_CURTO": {
                     "type": "string"
                 },
                 "CNPJ_CENTRO": {
