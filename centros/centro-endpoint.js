@@ -187,6 +187,8 @@ module.exports = function makeCentroEndpointHandler({
                 return "ESTADO"
             case (6):
                 return "PAIS"
+            case (7):
+                return "NOME_CURTO_CENTRO"
             default:
                 return null;
         };
