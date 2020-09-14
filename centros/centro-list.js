@@ -39,9 +39,15 @@ module.exports = function makeCentroList({
         searchValue
     }) {
         const params = ["ID_CENTRO", "NOME_CENTRO", "NOME_CURTO", "COMPLEMENTO", "BAIRRO", "CEP", "ENDERECO", "NUMERO_ENDERECO", "COMPLEMENTO", "BAIRRO", "CIDADE", "ESTADO", "PAIS", "ID_PRESIDENTE", "CNPJ_CENTRO", "DATA_FUNDACAO", "ID_REGIONAL"]
-        return await database.findById("CENTRO", params, {
-            ID_CENTRO: centroId
-        }, max, searchParam, searchValue)
+
+        if (searchParam == "ID_REGIONAL") {
+            const params = ["ID_REGIONAL"]
+            const idRegional = await database.findById("REGIONAL", params, null, max, "NOME_REGIONAL", searchValue)
+
+            searchValue = idRegional[0].ID_REGIONAL
+        }
+
+        return await database.findById("CENTRO", params, centroId, max, searchParam, searchValue)
     }
     async function getItems({
         max
