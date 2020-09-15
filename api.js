@@ -11,6 +11,7 @@ const handleAtividadeCentroRequest = require('./atividades_centro')
 
 const adaptRequest = require('./helpers/adapt-request')
 const app = express();
+app.options('*', cors()) // include before other routes
 
 app.use((req, res, next) => {
     console.log("Acessou o Middleware!");
