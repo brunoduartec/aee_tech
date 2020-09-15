@@ -47,7 +47,9 @@ module.exports = function makeCentroList({
             searchValue = idRegional[0].ID_REGIONAL
         }
 
-        return await database.findById("CENTRO", params, centroId, max, searchParam, searchValue)
+        return await database.findById("CENTRO", params, {
+            ID_CENTRO: centroId
+        }, max, searchParam, searchValue)
     }
     async function getItems({
         max
