@@ -43,7 +43,12 @@ module.exports = function makeCentro(
     }
 
     function normalizeDate(date) {
-        let dateSplited = date.split("/")
+        const charToSplit = "/"
+        if (date.match(/^([0-9]*-[0-9]*-[0-9]*T[0-9]*:[0-9]*:[0-9]*.[0-9]*Z)$/)) {
+            charToSplit = "-"
+        }
+        let dateSplited = date.split(charToSplit)
+
         return `${dateSplited[2]}-${dateSplited[1]}-${dateSplited[0]}`;
     }
 
