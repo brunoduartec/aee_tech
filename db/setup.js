@@ -6,24 +6,17 @@ const config = require('../env.json')[env]
 const database = new Database(config.mysql).getInstance();
 
 const fs = require('fs');
-const util = require('util');
+const path = require('path');
+const readline = require('readline');
 
-// Convert fs.readFile into Promise version of same    
-const readFile = util.promisify(fs.readFile);
-
-module.exports = async function bootstrap() {
-    fs = require('fs')
-    readFile('../Banco Alianca.sql')
-        .then(data => {
-            database.query(data)
-                .then(data => {
-                    console.log('Tabelas Criadas com sucesso');
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        })
-        .catch(err => {
-            console.log(err)
-        })
+module.exports.bootstrap = function () {
+    let rl = readline.createInterface({
+        input: fs.createReadStream('banco_alianca.sql'),
+        terminal: false
+    });
+    rl.on('line', function (chunk) {
+        database.query(chunk.toString('ascii'), function (err, sets, fields) {
+            if (err) console.log(err);
+        });
+    });
 }

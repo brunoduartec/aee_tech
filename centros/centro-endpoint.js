@@ -153,6 +153,7 @@ module.exports = function makeCentroEndpointHandler({
 
         try {
             centroInfo.centroId = id
+            centroInfo = makeCentro(centroInfo)
             const result = await centroList.update(centroInfo)
             return {
                 headers: {
