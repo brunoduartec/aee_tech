@@ -1,5 +1,5 @@
 # aee_tech
-Projeto para aplicativos da Aliança Espirita Evangelica
+Projeto de backend para aplicativos da Aliança Espirita Evangelica
 
 
 # Prerequisitos
