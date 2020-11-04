@@ -44,12 +44,28 @@ module.exports = function makeCentro(
 
     function normalizeDate(date) {
         let charToSplit = "/"
-        if (date.match(/^([0-9]*-[0-9]*-[0-9]*T[0-9]*:[0-9]*:[0-9]*.[0-9]*Z)$/)) {
-            charToSplit = "-"
+        if(typeof date == "object"){
+            date = date.toISOString()
         }
-        let dateSplited = date.split(charToSplit)
 
-        return `${dateSplited[2]}-${dateSplited[1]}-${dateSplited[0]}`;
+        if (date.match(/^([0-9]*-[0-9]*-[0-9]*T[0-9]*:[0-9]*:[0-9]*.[0-9]*Z)$/)  || date.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})$/)) {
+            charToSplit = "-"
+            let dateSplited = date.split("T")[0];
+            dateSplited = dateSplited.split(charToSplit)
+
+            return `${dateSplited[0]}-${dateSplited[1]}-${dateSplited[2]}`;
+        }
+        else{
+            if(date.split("-").length>0){
+                charToSplit = "-"
+            }
+            else{
+                charToSplit = "/"
+            }
+            let dateSplited = date.split(charToSplit)
+    
+            return `${dateSplited[2]}-${dateSplited[1]}-${dateSplited[0]}`;
+        }
     }
 
     //metodo usado para caso queiramos deixa alguma coisa tudo minusculo por exemplo
