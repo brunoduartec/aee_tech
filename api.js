@@ -40,6 +40,12 @@ app.use('/api/v1/centros/:id', centroController);
 app.all('/api/v1/regionais', regionalController)
 app.use('/api/v1/regionais/:id', regionalController);
 
+app.get('/api/v1/boostrap', function (req, res) {
+    const setup = require("./db/setup")()
+
+    res.status(200).send("Tabelas Iniciadas")
+})
+
 swaggerDoc(app);
 
 function centroController(req, res) {
@@ -80,7 +86,7 @@ function regionalController(req, res) {
         })
 }
 
-// const setup = require("./db/setup")()
+
 module.exports = function () {
     return app;
 }
