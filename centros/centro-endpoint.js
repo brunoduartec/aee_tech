@@ -61,12 +61,20 @@ module.exports = function makeCentroEndpointHandler({
             max
         })
 
+        let centrosReturn = []
+
+        for (let index = 0; index < result.length; index++) {
+            const element = result[index];
+            const centroParsed = makeCentro(element);
+            centrosReturn.push(centroParsed)
+        }
+
         return {
             headers: {
                 'Content-Type': 'application/json'
             },
             statusCode: 200,
-            data: JSON.stringify(result)
+            data: JSON.stringify(centrosReturn)
         }
     }
 
