@@ -17,14 +17,14 @@ services:
           MYSQL_USER: aee
           MYSQL_PASSWORD: aeepw
         networks:
-            - app-network
+            - aee_tech-network
     adminer:
         image: adminer
         # container_name: adminer
         ports:
             - 8090:8080
         networks:
-            - app-network
+            - aee_tech-network
     app:
         build: .
         command: npm start
@@ -35,9 +35,9 @@ services:
         volumes:
             - .:/usr/app
         networks:
-            - app-network
+            - aee_tech-network
         depends_on:
             - "db"
 networks:
-    app-network:
+    aee_tech-network:
         driver: bridge
