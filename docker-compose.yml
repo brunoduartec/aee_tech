@@ -3,7 +3,7 @@ version: "3"
 services:
     db:
         image: mysql:5.7
-        container_name: db
+        # container_name: db
         volumes:
           - ./.mysql-data/db:/var/lib/mysql
         restart: always
@@ -20,15 +20,15 @@ services:
             - app-network
     adminer:
         image: adminer
-        container_name: adminer
+        # container_name: adminer
         ports:
-            - 8080:8080
+            - 8090:8080
         networks:
             - app-network
     app:
         build: .
         command: npm start
-        image: aee_tech_api
+        # image: aee_tech_api
         container_name: app
         ports:
             - "3000:3000"
