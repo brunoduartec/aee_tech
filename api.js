@@ -41,7 +41,9 @@ app.all('/api/v1/regionais', regionalController)
 app.use('/api/v1/regionais/:id', regionalController);
 
 app.get('/api/v1/boostrap', function (req, res) {
-    const setup = require("./db/setup")()
+    const setup = require("./db/setup")
+
+    setup.bootstrap();
 
     res.status(200).send("Tabelas Iniciadas")
 })
