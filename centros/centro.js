@@ -56,7 +56,7 @@ module.exports = function makeCentro(
             return `${dateSplited[0]}-${dateSplited[1]}-${dateSplited[2]}`;
         }
         else{
-            if(date.split("-").length>0){
+            if(date.split("-").length>1){
                 charToSplit = "-"
             }
             else{
