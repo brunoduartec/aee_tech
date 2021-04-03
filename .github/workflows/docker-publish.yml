@@ -75,7 +75,8 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
       # Runs a single command using the runners shell
-      - name: Deploy
-        uses: distributhor/workflow-webhook@v1
-        with:
-          url: "http://162.214.123.133:50100/"
+      - name: Invoke deployment hook
+            uses: distributhor/workflow-webhook@v1
+            env:
+              webhook_url: ${{ secrets.WEBHOOK_URL }}
+              webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
