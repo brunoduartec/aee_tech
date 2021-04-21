@@ -8,9 +8,9 @@ services:
       - ./.mysql-data/regionais_db:/var/lib/mysql
     restart: always
     ports:
-      - 53000:3306
+      - 3306:3306
     expose:
-      - 53000
+      - 3306
     environment:
       MYSQL_ROOT_PASSWORD: aeepw
       MYSQL_DATABASE: aee
