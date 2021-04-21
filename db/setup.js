@@ -14,8 +14,13 @@ module.exports.bootstrap = function () {
     terminal: false,
   });
   rl.on("line", function (chunk) {
+    console.log("---------------READ FILE-----------------");
     database.query(chunk.toString("ascii"), function (err, sets, fields) {
-      if (err) console.log(err);
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("------Bootstraped----");
+      }
     });
   });
 };

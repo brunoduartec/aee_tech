@@ -1,43 +1,43 @@
 version: "3"
 
 services:
-    db:
-        image: mysql:5.7
-        container_name: db
-        volumes:
-          - ./.mysql-data/db:/var/lib/mysql
-        restart: always
-        ports:
-          - 52000:3306
-        expose:
-          - 52000
-        environment:
-          MYSQL_ROOT_PASSWORD: aeepw
-          MYSQL_DATABASE: aee
-          MYSQL_USER: aee
-          MYSQL_PASSWORD: aeepw
-        networks:
-            - app-network
-    adminer:
-        image: adminer
-        container_name: adminer
-        ports:
-            - 8080:8080
-        networks:
-            - app-network
-    app:
-        build: .
-        command: npm start
-        image: aee_tech_api
-        container_name: app
-        ports:
-            - "3000:3000"
-        volumes:
-            - .:/usr/app
-        networks:
-            - app-network
-        depends_on:
-            - "db"
+  regionais_db:
+    image: mysql:5.7
+    container_name: regionais_db
+    volumes:
+      - ./.mysql-data/regionais_db:/var/lib/mysql
+    restart: always
+    ports:
+      - 53000:3306
+    expose:
+      - 53000
+    environment:
+      MYSQL_ROOT_PASSWORD: aeepw
+      MYSQL_DATABASE: aee
+      MYSQL_USER: aee
+      MYSQL_PASSWORD: aeepw
+    networks:
+      - app-network
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - app-network
+  app:
+    build: .
+    command: npm start
+    image: aee_tech_api
+    container_name: app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/app
+    networks:
+      - app-network
+    depends_on:
+      - "regionais_db"
 networks:
-    app-network:
-        driver: bridge
+  app-network:
+    driver: bridge
