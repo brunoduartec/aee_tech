@@ -25,11 +25,11 @@ services:
       - 8080:8080
     networks:
       - app-network
-  app:
+  aee_digital_regionais:
     build: .
     command: npm start
-    image: aee_tech_api
-    container_name: app
+    image: aee_digital_regionais
+    container_name: aee_digital_regionais
     ports:
       - "3000:3000"
     volumes:
