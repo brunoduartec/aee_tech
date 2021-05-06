@@ -38,6 +38,8 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     //work for one param for a while
     let paramKeys = Object.keys(params);
     let paramValues = Object.values(params);
+
+    let searchParam = paramKeys[0];
     let searchValue = paramValues[0];
 
     let searchParamConverted = convertSearchParam(paramKeys[0]);
@@ -45,16 +47,26 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     let hasQuery = function (id, searchParam, searchValue) {
       return id || (searchParam && searchValue);
     };
-    const result = hasQuery(id, searchParamConverted, searchValue)
-      ? await centroList.findById({
+
+    let result = [];
+
+    if (searchParam) {
+      if (searchParamConverted) {
+        console.log("-----------CHEGOU AQUI------------");
+        result = await centroList.findById({
           centroId: id,
           max,
           searchParam: searchParamConverted,
           searchValue,
-        })
-      : await centroList.getItems({
-          max,
         });
+      } else {
+        throw new RequiredParameterError("Query param not match list");
+      }
+    } else {
+      result = await centroList.getItems({
+        max,
+      });
+    }
 
     let centrosReturn = [];
 
