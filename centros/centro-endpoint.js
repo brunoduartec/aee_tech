@@ -5,6 +5,7 @@ const {
 } = require("../helpers/errors");
 const makeHttpError = require("../helpers/http-error");
 const makeCentro = require("./centro");
+const logger = require("../helpers/logger");
 
 module.exports = function makeCentroEndpointHandler({ centroList }) {
   return async function handle(httpRequest) {
@@ -31,10 +32,7 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     }
   };
 
-  async function getCentros(httpRequest) {
-    const { id } = httpRequest.pathParams || {};
-    const { max, ...params } = httpRequest.queryParams || {};
-
+  function selectParam(params) {
     //work for one param for a while
     let paramKeys = Object.keys(params);
     let paramValues = Object.values(params);
@@ -43,10 +41,21 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     let searchValue = paramValues[0];
 
     let searchParamConverted = convertSearchParam(paramKeys[0]);
-
-    let hasQuery = function (id, searchParam, searchValue) {
-      return id || (searchParam && searchValue);
+    return {
+      searchParam: searchParam,
+      searchValue: searchValue,
+      searchParamConverted: searchParamConverted,
     };
+  }
+
+  async function getCentros(httpRequest) {
+    const { id } = httpRequest.pathParams || {};
+    const { max, ...params } = httpRequest.queryParams || {};
+
+    //work for one param for a while
+    let { searchParam, searchValue, searchParamConverted } = selectParam(
+      params
+    );
 
     let result = [];
 
@@ -107,6 +116,7 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
 
     try {
       const centro = makeCentro(centroInfo);
+      logger.info(centro);
       const result = await centroList.add(centro);
       return {
         headers: {

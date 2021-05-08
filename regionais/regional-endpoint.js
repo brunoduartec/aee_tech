@@ -36,17 +36,49 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
     }
   };
 
+  function selectParam(params) {
+    //work for one param for a while
+    let paramKeys = Object.keys(params);
+    let paramValues = Object.values(params);
+
+    let searchParam = paramKeys[0];
+    let searchValue = paramValues[0];
+
+    let searchParamConverted = convertSearchParam(paramKeys[0]);
+    return {
+      searchParam: searchParam,
+      searchValue: searchValue,
+      searchParamConverted: searchParamConverted,
+    };
+  }
+
   async function getRegionals(httpRequest) {
     const { id } = httpRequest.pathParams || {};
-    const { max } = httpRequest.queryParams || {};
+    const { max, ...params } = httpRequest.queryParams || {};
 
-    const result = id
-      ? await regionalList.findById({
+    //work for one param for a while
+    let { searchParam, searchValue, searchParamConverted } = selectParam(
+      params
+    );
+
+    let result = [];
+
+    if (searchParam) {
+      if (searchParamConverted) {
+        result = await regionalList.findById({
           regionalId: id,
-        })
-      : await regionalList.getItems({
           max,
+          searchParam: searchParamConverted,
+          searchValue,
         });
+      } else {
+        throw new RequiredParameterError("Query param not match list");
+      }
+    } else {
+      result = await regionalList.getItems({
+        max,
+      });
+    }
 
     return {
       headers: {
@@ -157,6 +189,19 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
             ? 400
             : 500,
       });
+    }
+  }
+
+  function convertSearchParam(searchParam) {
+    switch (searchParam) {
+      case "nome":
+        return "NOME_REGIONAL";
+        break;
+      case "pais":
+        return "PAIS";
+        break;
+      default:
+        return null;
     }
   }
 };

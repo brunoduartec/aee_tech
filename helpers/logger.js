@@ -1,9 +1,9 @@
 module.exports = class Logger {
-  logInfo(data) {
+  info(data) {
     console.log("[INFO]", data);
   }
 
-  logError(error) {
+  error(error) {
     console.log("[ERROR]", error);
   }
 };
