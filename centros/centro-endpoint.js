@@ -5,7 +5,8 @@ const {
 } = require("../helpers/errors");
 const makeHttpError = require("../helpers/http-error");
 const makeCentro = require("./centro");
-const logger = require("../helpers/logger");
+const Logger = require("../helpers/logger");
+const logger = new Logger();
 
 module.exports = function makeCentroEndpointHandler({ centroList }) {
   return async function handle(httpRequest) {
