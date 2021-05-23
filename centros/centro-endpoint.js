@@ -54,9 +54,8 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     const { max, ...params } = httpRequest.queryParams || {};
 
     //work for one param for a while
-    let { searchParam, searchValue, searchParamConverted } = selectParam(
-      params
-    );
+    let { searchParam, searchValue, searchParamConverted } =
+      selectParam(params);
 
     let result = [];
 
@@ -107,6 +106,7 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     if (typeof httpRequest.body == "string") {
       try {
         centroInfo = JSON.parse(centroInfo);
+        logger.info(`Parse Centro success:  ${JSON.stringify(centroInfo)}`);
       } catch {
         return makeHttpError({
           statusCode: 400,
@@ -117,6 +117,7 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
 
     try {
       const centro = makeCentro(centroInfo);
+      logger.info(`Make Centro:  ${centro.toString()}`);
       logger.info(centro);
       const result = await centroList.add(centro);
       return {

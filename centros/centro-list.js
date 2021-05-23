@@ -24,7 +24,7 @@ module.exports = function makeCentroList({ database }) {
       },
     };
 
-    logger.info(data);
+    logger.info(`Will Add: ${data.toString()}`);
     if (NOME_REGIONAL) {
       const params = ["ID_REGIONAL"];
       const idRegional = await database.findById("REGIONAL", params, {
