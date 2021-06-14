@@ -27,7 +27,6 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
       CEP,
       CNPJ_CENTRO,
       ENDERECO,
-      ...otherInfo,
     };
   }
 
@@ -40,7 +39,11 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
   }
 
   function normalizeText(text) {
-    return text.replace("'", "´");
+    if (text) {
+      return text.replace("'", "´");
+    } else {
+      return "";
+    }
   }
 
   function normalizeDate(date) {
@@ -72,13 +75,20 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
 
   //metodo usado para caso queiramos deixa alguma coisa tudo minusculo por exemplo
   function normalize({
-    DATA_FUNDACAO,
     NOME_CENTRO,
+    NOME_CURTO,
+    CNPJ_CENTRO,
+    DATA_FUNDACAO,
+    ID_REGIONAL,
+    ENDERECO,
+    NUMERO_ENDERECO,
+    COMPLEMENTO,
+    CEP,
     BAIRRO,
     CIDADE,
     ESTADO,
     PAIS,
-    ...otherInfo
+    ID_PRESIDENTE,
   }) {
     DATA_FUNDACAO = normalizeDate(DATA_FUNDACAO);
     NOME_CENTRO = normalizeText(NOME_CENTRO);
@@ -87,13 +97,20 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     ESTADO = normalizeText(ESTADO);
     PAIS = normalizeText(PAIS);
     return {
-      DATA_FUNDACAO,
       NOME_CENTRO,
+      NOME_CURTO,
+      CNPJ_CENTRO,
+      DATA_FUNDACAO,
+      ID_REGIONAL,
+      ENDERECO,
+      NUMERO_ENDERECO,
+      COMPLEMENTO,
+      CEP,
       BAIRRO,
       CIDADE,
       ESTADO,
       PAIS,
-      ...otherInfo,
+      ID_PRESIDENTE,
     };
   }
 };

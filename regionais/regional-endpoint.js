@@ -5,28 +5,26 @@ const {
 } = require("../helpers/errors");
 const makeHttpError = require("../helpers/http-error");
 const makeRegional = require("./regional");
-const Logger = require("../helpers/logger");
-const logger = new Logger();
 
 module.exports = function makeRegionalEndpointHandler({ regionalList }) {
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
       case "POST":
-        return postRegional(httpRequest);
+        return post(httpRequest);
         break;
       case "GET":
-        return getRegionals(httpRequest);
+        return get(httpRequest);
         break;
       case "DELETE":
-        return removeRegional(httpRequest);
+        return remove(httpRequest);
         break;
       case "PUT":
-        return updateRegional(httpRequest);
+        return update(httpRequest);
         break;
 
       default:
         let errorMessage = `${httpRequest.method} method not allowed.`;
-        logger.logError(errorMessage);
+        console.log(errorMessage);
 
         return makeHttpError({
           statusCode: 405,
@@ -36,44 +34,32 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
     }
   };
 
-  function selectParam(params) {
-    //work for one param for a while
-    let paramKeys = Object.keys(params);
-    let paramValues = Object.values(params);
+  function formatSearchParam(id, params) {
+    let searchParams;
+    if (id) {
+      searchParams = {
+        id: id,
+      };
+    } else if (Object.keys(params).length > 0) {
+      searchParams = params;
+    }
 
-    let searchParam = paramKeys[0];
-    let searchValue = paramValues[0];
-
-    let searchParamConverted = convertSearchParam(paramKeys[0]);
-    return {
-      searchParam: searchParam,
-      searchValue: searchValue,
-      searchParamConverted: searchParamConverted,
-    };
+    return searchParams;
   }
 
-  async function getRegionals(httpRequest) {
+  async function get(httpRequest) {
     const { id } = httpRequest.pathParams || {};
     const { max, ...params } = httpRequest.queryParams || {};
 
-    //work for one param for a while
-    let { searchParam, searchValue, searchParamConverted } = selectParam(
-      params
-    );
-
+    let searchParams = formatSearchParam(id, params);
+    let hasParams = searchParams != null;
     let result = [];
 
-    if (searchParam) {
-      if (searchParamConverted) {
-        result = await regionalList.findById({
-          regionalId: id,
-          max,
-          searchParam: searchParamConverted,
-          searchValue,
-        });
-      } else {
-        throw new RequiredParameterError("Query param not match list");
-      }
+    if (hasParams) {
+      result = await regionalList.findByItems({
+        max,
+        searchParams,
+      });
     } else {
       result = await regionalList.getItems({
         max,
@@ -89,7 +75,7 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
     };
   }
 
-  async function postRegional(httpRequest) {
+  async function post(httpRequest) {
     let regionalInfo = httpRequest.body;
     if (!regionalInfo) {
       return makeHttpError({
@@ -133,11 +119,13 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
     }
   }
 
-  async function removeRegional(httpRequest) {
+  async function remove(httpRequest) {
     const { id } = httpRequest.pathParams || {};
-    const result = await regionalList.remove({
-      regionalId: id,
-    });
+    const { max, ...params } = httpRequest.queryParams || {};
+
+    let searchParams = formatSearchParam(id, params);
+
+    const result = await regionalList.remove(searchParams);
     return {
       headers: {
         "Content-Type": "application/json",
@@ -147,8 +135,12 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
     };
   }
 
-  async function updateRegional(httpRequest) {
+  async function update(httpRequest) {
     const { id } = httpRequest.pathParams || {};
+    const { max, ...params } = httpRequest.queryParams || {};
+
+    let searchParams = formatSearchParam(id, params);
+
     let regionalInfo = httpRequest.body;
     if (!regionalInfo) {
       return makeHttpError({
@@ -170,7 +162,10 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
 
     try {
       regionalInfo.regionalId = id;
-      const result = await regionalList.update(regionalInfo);
+      const result = await regionalList.update({
+        searchParams: searchParams,
+        regional: regionalInfo,
+      });
       return {
         headers: {
           "Content-Type": "application/json",
@@ -189,19 +184,6 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
             ? 400
             : 500,
       });
-    }
-  }
-
-  function convertSearchParam(searchParam) {
-    switch (searchParam) {
-      case "nome":
-        return "NOME_REGIONAL";
-        break;
-      case "pais":
-        return "PAIS";
-        break;
-      default:
-        return null;
     }
   }
 };

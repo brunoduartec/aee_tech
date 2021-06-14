@@ -1,13 +1,16 @@
-const makeDb = require('../db')
-const makeCentroList = require('./centro-list')
-const makeCentroEndpointHandler = require('./centro-endpoint')
+const makeDb = require("../db");
+const makeCentroList = require("./centro-list");
 
-const database = makeDb()
+const makeCentroEndpointHandler = require("./centro-endpoint");
+
+const CentroModel = require("./centro-model");
+const centroDB = makeDb(CentroModel);
 const centroList = makeCentroList({
-    database
-})
-const contactsEndpointHandler = makeCentroEndpointHandler({
-    centroList
-})
+  centroDB,
+});
 
-module.exports = contactsEndpointHandler
+const contactsEndpointHandler = makeCentroEndpointHandler({
+  centroList,
+});
+
+module.exports = contactsEndpointHandler;

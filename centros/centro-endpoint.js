@@ -5,84 +5,73 @@ const {
 } = require("../helpers/errors");
 const makeHttpError = require("../helpers/http-error");
 const makeCentro = require("./centro");
-const Logger = require("../helpers/logger");
-const logger = new Logger();
+
+const makeDb = require("../db");
+const RegionalModel = require("../regionais/regional-model");
+const regionalDB = makeDb(RegionalModel);
+const makeRegionalList = require("../regionais/regional-list");
+const regionalList = makeRegionalList({
+  regionalDB,
+});
 
 module.exports = function makeCentroEndpointHandler({ centroList }) {
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
       case "POST":
-        return postCentro(httpRequest);
+        return post(httpRequest);
         break;
       case "GET":
-        return getCentros(httpRequest);
+        return get(httpRequest);
         break;
       case "DELETE":
-        return removeCentro(httpRequest);
+        return remove(httpRequest);
         break;
       case "PUT":
-        return updateCentro(httpRequest);
+        return update(httpRequest);
         break;
 
       default:
+        let errorMessage = `${httpRequest.method} method not allowed.`;
+        console.log(errorMessage);
+
         return makeHttpError({
           statusCode: 405,
-          errorMessage: `${httpRequest.method} method not allowed.`,
+          errorMessage: errorMessage,
         });
         break;
     }
   };
 
-  function selectParam(params) {
-    //work for one param for a while
-    let paramKeys = Object.keys(params);
-    let paramValues = Object.values(params);
+  function formatSearchParam(id, params) {
+    let searchParams;
+    if (id) {
+      searchParams = {
+        id: id,
+      };
+    } else if (Object.keys(params).length > 0) {
+      searchParams = params;
+    }
 
-    let searchParam = paramKeys[0];
-    let searchValue = paramValues[0];
-
-    let searchParamConverted = convertSearchParam(paramKeys[0]);
-    return {
-      searchParam: searchParam,
-      searchValue: searchValue,
-      searchParamConverted: searchParamConverted,
-    };
+    return searchParams;
   }
 
-  async function getCentros(httpRequest) {
+  async function get(httpRequest) {
     const { id } = httpRequest.pathParams || {};
     const { max, ...params } = httpRequest.queryParams || {};
 
-    //work for one param for a while
-    let { searchParam, searchValue, searchParamConverted } =
-      selectParam(params);
-
+    let searchParams = formatSearchParam(id, params);
+    let hasParams = searchParams != null;
     let result = [];
 
-    if (searchParam) {
-      if (searchParamConverted) {
-        console.log("-----------CHEGOU AQUI------------");
-        result = await centroList.findById({
-          centroId: id,
-          max,
-          searchParam: searchParamConverted,
-          searchValue,
-        });
-      } else {
-        throw new RequiredParameterError("Query param not match list");
-      }
+    if (hasParams) {
+      result = await centroList.findByItems({
+        max,
+        searchParams,
+      });
     } else {
       result = await centroList.getItems({
         max,
       });
-    }
-
-    let centrosReturn = [];
-
-    for (let index = 0; index < result.length; index++) {
-      const element = result[index];
-      const centroParsed = makeCentro(element);
-      centrosReturn.push(centroParsed);
     }
 
     return {
@@ -90,11 +79,11 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
         "Content-Type": "application/json",
       },
       statusCode: 200,
-      data: JSON.stringify(centrosReturn),
+      data: JSON.stringify(result),
     };
   }
 
-  async function postCentro(httpRequest) {
+  async function post(httpRequest) {
     let centroInfo = httpRequest.body;
     if (!centroInfo) {
       return makeHttpError({
@@ -106,7 +95,6 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     if (typeof httpRequest.body == "string") {
       try {
         centroInfo = JSON.parse(centroInfo);
-        logger.info(`Parse Centro success:  ${JSON.stringify(centroInfo)}`);
       } catch {
         return makeHttpError({
           statusCode: 400,
@@ -116,9 +104,15 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     }
 
     try {
+      const regional = await regionalList.findByItems({
+        searchParams: {
+          NOME_REGIONAL: centroInfo.NOME_REGIONAL,
+        },
+      });
+
+      centroInfo.REGIONAL_ID = regional._id;
       const centro = makeCentro(centroInfo);
-      logger.info(`Make Centro:  ${centro.toString()}`);
-      logger.info(centro);
+
       const result = await centroList.add(centro);
       return {
         headers: {
@@ -141,11 +135,13 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     }
   }
 
-  async function removeCentro(httpRequest) {
+  async function remove(httpRequest) {
     const { id } = httpRequest.pathParams || {};
-    const result = await centroList.remove({
-      centroId: id,
-    });
+    const { max, ...params } = httpRequest.queryParams || {};
+
+    let searchParams = formatSearchParam(id, params);
+
+    const result = await centroList.remove(searchParams);
     return {
       headers: {
         "Content-Type": "application/json",
@@ -155,8 +151,12 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     };
   }
 
-  async function updateCentro(httpRequest) {
+  async function update(httpRequest) {
     const { id } = httpRequest.pathParams || {};
+    const { max, ...params } = httpRequest.queryParams || {};
+
+    let searchParams = formatSearchParam(id, params);
+
     let centroInfo = httpRequest.body;
     if (!centroInfo) {
       return makeHttpError({
@@ -178,8 +178,10 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
 
     try {
       centroInfo.centroId = id;
-      centroInfo = makeCentro(centroInfo);
-      const result = await centroList.update(centroInfo);
+      const result = await centroList.update({
+        searchParams: searchParams,
+        centro: centroInfo,
+      });
       return {
         headers: {
           "Content-Type": "application/json",
@@ -198,27 +200,6 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
             ? 400
             : 500,
       });
-    }
-  }
-
-  function convertSearchParam(searchParam) {
-    switch (searchParam) {
-      case "nome":
-        return "NOME_CENTRO";
-      case "id_regional":
-        return "ID_REGIONAL";
-      case "endereco":
-        return "ENDERECO";
-      case "cidade":
-        return "CIDADE";
-      case "estado":
-        return "ESTADO";
-      case "pais":
-        return "PAIS";
-      case "curto":
-        return "NOME_CURTO";
-      default:
-        return null;
     }
   }
 };
