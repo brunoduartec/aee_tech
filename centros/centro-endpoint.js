@@ -6,14 +6,6 @@ const {
 const makeHttpError = require("../helpers/http-error");
 const makeCentro = require("./centro");
 
-const makeDb = require("../db");
-const RegionalModel = require("../regionais/regional-model");
-const regionalDB = makeDb(RegionalModel);
-const makeRegionalList = require("../regionais/regional-list");
-const regionalList = makeRegionalList({
-  regionalDB,
-});
-
 module.exports = function makeCentroEndpointHandler({ centroList }) {
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
@@ -104,16 +96,7 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     }
 
     try {
-      const regional = await regionalList.findByItems({
-        searchParams: {
-          NOME_REGIONAL: centroInfo.NOME_REGIONAL,
-        },
-      });
-
-      centroInfo.REGIONAL_ID = regional._id;
-      const centro = makeCentro(centroInfo);
-
-      const result = await centroList.add(centro);
+      const result = await centroList.add(centroInfo);
       return {
         headers: {
           "Content-Type": "application/json",

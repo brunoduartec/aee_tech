@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const { Schema } = mongoose;
 
 const centroSchema = new Schema({
@@ -18,7 +19,7 @@ const centroSchema = new Schema({
     type: String,
     require: true,
   },
-  REGIONAL_ID: {
+  REGIONAL: {
     type: String,
     require: true,
   },

@@ -1,4 +1,4 @@
-module.exports = function makeDb(Model) {
+module.exports = function makeDb(ModelFactory) {
   return Object.freeze({
     add,
     findByItems,
@@ -20,7 +20,7 @@ module.exports = function makeDb(Model) {
         item = "_id";
       }
 
-      if (item.toLocaleLowerCase().contains("id")) {
+      if (item.toLocaleLowerCase().includes("id")) {
         searchParams[item] = { value };
       } else {
         searchParams[item] = { $regex: value };
@@ -30,8 +30,9 @@ module.exports = function makeDb(Model) {
     return searchParams;
   }
 
-  async function add(pessoaInfo) {
+  async function add(modelName, pessoaInfo) {
     try {
+      const Model = ModelFactory.getModel(modelName);
       pessoa = new Model(pessoaInfo);
 
       await pessoa.save();
@@ -39,23 +40,34 @@ module.exports = function makeDb(Model) {
       throw error;
     }
   }
-  async function findByItems(max, params) {
+  async function findByItems(modelName, max, params) {
     try {
+      const Model = ModelFactory.getModel(modelName);
       params = formatParams(params);
-      return await Model.findOne(params);
+      let item = await Model.findOne(params);
+
+      return item;
     } catch (error) {
       throw error;
     }
   }
-  async function getItems(max) {
+  async function getItems(modelName, max) {
     try {
-      return await Model.find();
+      const Model = ModelFactory.getModel(modelName);
+      let items = await Model.find();
+
+      if (items.length > 0) {
+        return items;
+      } else {
+        return null;
+      }
     } catch (error) {
       throw error;
     }
   }
-  async function remove(conditions) {
+  async function remove(modelName, conditions) {
     try {
+      const Model = ModelFactory.getModel(modelName);
       conditions = formatParams(conditions);
       const result = await Model.deleteOne(conditions);
       return result;
@@ -63,19 +75,21 @@ module.exports = function makeDb(Model) {
       throw error;
     }
   }
-  async function replace(pessoa, conditions) {
+  async function replace(modelName, item, conditions) {
     try {
+      const Model = ModelFactory.getModel(modelName);
       conditions = formatParams(conditions);
-      const result = await Model.replaceOne(conditions, pessoa);
+      const result = await Model.replaceOne(conditions, item);
       return result;
     } catch (error) {
       throw error;
     }
   }
-  async function update(pessoa, conditions) {
+  async function update(modelName, item, conditions) {
     try {
+      const Model = ModelFactory.getModel(modelName);
       conditions = formatParams(conditions);
-      const result = await Model.updateOne(conditions, pessoa);
+      const result = await Model.updateOne(conditions, item);
       return result;
     } catch (error) {
       throw error;

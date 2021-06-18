@@ -30,29 +30,56 @@ module.exports = function makeCentroList({ database }) {
   }
 
   async function add(centroInfo) {
-    let centro = makeCentro(centroInfo);
-    return await database.add(centro);
+    try {
+      let regional = await database.findByItems("regional", 1, {
+        NOME_REGIONAL: centroInfo.REGIONAL,
+      });
+
+      centroInfo.REGIONAL = regional.NOME_REGIONAL;
+      let centro = makeCentro(centroInfo);
+      return await database.add("centro", centro);
+    } catch (error) {
+      throw error;
+    }
   }
   async function findByItems({ max, searchParams }) {
-    let centro = await database.findByItems(max, searchParams);
+    try {
+      let centro = await database.findByItems("centro", max, searchParams);
 
-    const centros = formatOutput(centro);
-    return centros;
+      const centros = formatOutput(centro);
+      return centros;
+    } catch (error) {
+      throw error;
+    }
   }
   async function getItems({ max }) {
-    let items = await database.getItems(max);
-
-    const centros = formatOutput(items);
-
-    return centros;
+    try {
+      let items = await database.getItems("centro", max);
+      const centros = formatOutput(items);
+      return centros;
+    } catch (error) {
+      throw error;
+    }
   }
   async function remove(searchParams) {
-    return await database.remove(searchParams);
+    try {
+      return await database.remove("centro", searchParams);
+    } catch (error) {
+      throw error;
+    }
   }
   async function replace({ searchParams, centro }) {
-    return await database.replace(centro, searchParams);
+    try {
+      return await database.replace("centro", centro, searchParams);
+    } catch (error) {
+      throw error;
+    }
   }
   async function update({ searchParams, centro }) {
-    return await database.update(centro, searchParams);
+    try {
+      return await database.update("centro", centro, searchParams);
+    } catch (error) {
+      throw error;
+    }
   }
 };

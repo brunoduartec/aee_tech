@@ -2,8 +2,9 @@ const makeDb = require("../db");
 const makeRegionalList = require("./regional-list");
 const makeRegionalEndpointHandler = require("./regional-endpoint");
 
-const RegionalModel = require("./regional-model");
-const database = makeDb(RegionalModel);
+let ModelFactory = require("../db/modelFactory");
+const database = makeDb(ModelFactory);
+
 const regionalList = makeRegionalList({
   database,
 });

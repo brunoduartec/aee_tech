@@ -13,7 +13,7 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     CEP,
     CNPJ_CENTRO,
     ENDERECO,
-    ...otherInfo
+    _id,
   } = {}) {
     validateName("NOME_CENTRO", NOME_CENTRO);
     validateName("NOME_CURTO", NOME_CURTO);
@@ -79,7 +79,7 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     NOME_CURTO,
     CNPJ_CENTRO,
     DATA_FUNDACAO,
-    ID_REGIONAL,
+    REGIONAL_ID,
     ENDERECO,
     NUMERO_ENDERECO,
     COMPLEMENTO,
@@ -88,7 +88,8 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     CIDADE,
     ESTADO,
     PAIS,
-    ID_PRESIDENTE,
+    PRESIDENTE_ID,
+    _id,
   }) {
     DATA_FUNDACAO = normalizeDate(DATA_FUNDACAO);
     NOME_CENTRO = normalizeText(NOME_CENTRO);
@@ -101,7 +102,7 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
       NOME_CURTO,
       CNPJ_CENTRO,
       DATA_FUNDACAO,
-      ID_REGIONAL,
+      REGIONAL_ID,
       ENDERECO,
       NUMERO_ENDERECO,
       COMPLEMENTO,
@@ -110,7 +111,8 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
       CIDADE,
       ESTADO,
       PAIS,
-      ID_PRESIDENTE,
+      PRESIDENTE_ID,
+      ID: _id,
     };
   }
 };
