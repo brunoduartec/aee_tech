@@ -1,162 +1,98 @@
-const Database = require("../helpers/Database");
-const Logger = require("../helpers/logger");
-const logger = new Logger();
-
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
-const config = require("../env.json")[env];
-
-const database = new Database(config.mysql).getInstance();
-
-const setup = require("./setup");
-exports.setup = setup.bootstrap;
-
-module.exports = function makeDb() {
+module.exports = function makeDb(ModelFactory) {
   return Object.freeze({
     add,
-    findById,
+    findByItems,
     getItems,
     remove,
     replace,
     update,
   });
 
-  function setConditionQueryPart(conditions) {
-    let query = "";
-    let conditionKeysToAdd = Object.keys(conditions);
-    let conditionValuesToAdd = Object.values(conditions);
+  function formatParams(searchParams) {
+    let items = Object.keys(searchParams);
+    let values = Object.values(searchParams);
 
-    for (let index = 0; index < conditionKeysToAdd.length; index++) {
-      const param = conditionKeysToAdd[index];
-      const condition = conditionValuesToAdd[index];
+    searchParams = {};
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      const value = values[index];
+      if (item == "ID") {
+        item = "_id";
+      }
 
-      const typeOfCondition = typeof condition;
-      if (typeOfCondition == "string") {
-        query += param + "= '" + condition + "'";
+      if (item.toLocaleLowerCase().includes("id")) {
+        searchParams[item] = { value };
       } else {
-        query += param + "= " + condition;
+        searchParams[item] = { $regex: value };
       }
     }
 
-    return query;
+    return searchParams;
   }
 
-  async function add(table, values) {
-    let keysToAdd = Object.keys(values);
-    let valuesToAdd = Object.values(values);
+  async function add(modelName, pessoaInfo) {
+    try {
+      const Model = ModelFactory.getModel(modelName);
+      pessoa = new Model(pessoaInfo);
 
-    let query = "INSERT INTO " + table + "(";
-
-    for (let index = 0; index < keysToAdd.length; index++) {
-      const param = keysToAdd[index];
-      query += param + ",";
+      await pessoa.save();
+    } catch (error) {
+      throw error;
     }
+  }
+  async function findByItems(modelName, max, params) {
+    try {
+      const Model = ModelFactory.getModel(modelName);
+      params = formatParams(params);
+      let item = await Model.findOne(params);
 
-    //removes the last comma
-    query = query.substring(0, query.length - 1);
+      return item;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async function getItems(modelName, max) {
+    try {
+      const Model = ModelFactory.getModel(modelName);
+      let items = await Model.find();
 
-    query += ") VALUES (";
-
-    for (let index = 0; index < valuesToAdd.length; index++) {
-      const value = valuesToAdd[index];
-      const typeOfValue = typeof value;
-      if (typeOfValue == "string") {
-        query += "'" + value + "',";
+      if (items.length > 0) {
+        return items;
       } else {
-        query += value + ",";
+        return null;
       }
+    } catch (error) {
+      throw error;
     }
-
-    //removes the last comma
-    query = query.substring(0, query.length - 1);
-
-    query += ")";
-
-    logger.info(`Execute Query ${query}`);
-
-    return await database.query(query);
   }
-  async function findById(
-    table,
-    params,
-    conditions,
-    max,
-    searchParam,
-    searchValue
-  ) {
-    let query = "SELECT ";
-
-    for (let index = 0; index < params.length; index++) {
-      const param = params[index];
-      query += param + ",";
+  async function remove(modelName, conditions) {
+    try {
+      const Model = ModelFactory.getModel(modelName);
+      conditions = formatParams(conditions);
+      const result = await Model.deleteOne(conditions);
+      return result;
+    } catch (error) {
+      throw error;
     }
-
-    //removes the last comma
-    query = query.substring(0, query.length - 1);
-    query += " From " + table + " WHERE ";
-
-    if (searchParam) {
-      query += `${searchParam} LIKE '%${searchValue}%';`;
-    } else {
-      query += setConditionQueryPart(conditions);
+  }
+  async function replace(modelName, item, conditions) {
+    try {
+      const Model = ModelFactory.getModel(modelName);
+      conditions = formatParams(conditions);
+      const result = await Model.replaceOne(conditions, item);
+      return result;
+    } catch (error) {
+      throw error;
     }
-
-    logger.info(`Execute Query ${query}`);
-    let ret = await database.query(query);
-
-    return ret;
   }
-  async function getItems(table, params, max, search) {
-    let query = "SELECT ";
-
-    for (let index = 0; index < params.length; index++) {
-      const param = params[index];
-      query += param + ",";
+  async function update(modelName, item, conditions) {
+    try {
+      const Model = ModelFactory.getModel(modelName);
+      conditions = formatParams(conditions);
+      const result = await Model.updateOne(conditions, item);
+      return result;
+    } catch (error) {
+      throw error;
     }
-
-    //removes the last comma
-    query = query.substring(0, query.length - 1);
-
-    query += " From " + table;
-
-    logger.info(`Execute Query ${query}`);
-    return await database.query(query);
-  }
-  async function remove(table, conditions) {
-    let query = "DELETE FROM " + table + " WHERE ";
-    query += setConditionQueryPart(conditions);
-
-    logger.info(`Execute Query ${query}`);
-    return await database.query(query);
-  }
-  async function replace(table, values, conditions) {
-    await remove(table, conditions);
-    await add(table, values);
-  }
-  async function update(table, values, conditions) {
-    let keysToAdd = Object.keys(values);
-    let valuesToAdd = Object.values(values);
-
-    let query = "UPDATE " + table + " SET";
-
-    for (let index = 0; index < keysToAdd.length; index++) {
-      const param = keysToAdd[index];
-      const value = valuesToAdd[index];
-
-      const typeOfValue = typeof value;
-      if (typeOfValue == "string") {
-        query += " " + param + " = '" + value + "',";
-      } else {
-        query += " " + param + " = " + value + ",";
-      }
-    }
-
-    //removes the last comma
-    query = query.substring(0, query.length - 1);
-
-    query += "  WHERE ";
-    query += setConditionQueryPart(conditions);
-
-    logger.info(`Execute Query ${query}`);
-    return await database.query(query);
   }
 };

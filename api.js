@@ -2,6 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+const Connection = require("./db/connection")();
+const ModelFactory = require("./db/modelFactory");
+
+const CentroModel = require("./centros/centro-model");
+const RegionalModel = require("./regionais/regional-model");
+
+ModelFactory.insertModel("centro", CentroModel);
+ModelFactory.insertModel("regional", RegionalModel);
+
 const swaggerDoc = require("./helpers/swaggerDoc");
 
 const handleCentroRequest = require("./centros");
@@ -42,13 +51,6 @@ app.use("/api/v1/centros/:id", centroController);
 
 app.all("/api/v1/regionais", regionalController);
 app.use("/api/v1/regionais/:id", regionalController);
-
-app.get("/api/v1/boostrap", function (req, res) {
-  console.log("---roteirizou---");
-  const setup = require("./db/setup").bootstrap();
-
-  res.status(200).send("Tabelas Iniciadas");
-});
 
 swaggerDoc(app);
 

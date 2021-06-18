@@ -1,122 +1,85 @@
 const makeCentro = require("./centro");
-const Logger = require("../helpers/logger");
-const logger = new Logger();
-
 const { UniqueConstraintError } = require("../helpers/errors");
 
 module.exports = function makeCentroList({ database }) {
   return Object.freeze({
     add,
-    findById,
+    findByItems,
     getItems,
     remove,
     replace,
     update,
   });
 
-  async function add({ centroId, NOME_REGIONAL, ...centro }) {
-    let data = {
-      message: "add",
-      info: {
-        centroId: centroId,
-        regional: NOME_REGIONAL,
-        centro: centro,
-      },
-    };
+  function formatOutput(items) {
+    let centros = [];
 
-    logger.info(`Will Add: ${data.toString()}`);
-    if (NOME_REGIONAL) {
-      const params = ["ID_REGIONAL"];
-      const idRegional = await database.findById("REGIONAL", params, {
-        NOME_REGIONAL: NOME_REGIONAL,
+    if (items) {
+      if (items.length > 0) {
+        items.forEach((item) => {
+          let centro = makeCentro(item);
+          centros.push(centro);
+        });
+      } else {
+        let centro = makeCentro(items);
+        centros.push(centro);
+      }
+    }
+
+    return centros;
+  }
+
+  async function add(centroInfo) {
+    try {
+      let regional = await database.findByItems("regional", 1, {
+        NOME_REGIONAL: centroInfo.REGIONAL,
       });
 
-      centro.ID_REGIONAL = idRegional[0].ID_REGIONAL;
+      centroInfo.REGIONAL = regional.NOME_REGIONAL;
+      let centro = makeCentro(centroInfo);
+      return await database.add("centro", centro);
+    } catch (error) {
+      throw error;
     }
-
-    return await database.add("CENTRO", centro);
   }
-  async function findById({ centroId, max, searchParam, searchValue }) {
-    const params = [
-      "ID_CENTRO",
-      "NOME_CENTRO",
-      "NOME_CURTO",
-      "COMPLEMENTO",
-      "BAIRRO",
-      "CEP",
-      "ENDERECO",
-      "NUMERO_ENDERECO",
-      "COMPLEMENTO",
-      "BAIRRO",
-      "CIDADE",
-      "ESTADO",
-      "PAIS",
-      "ID_PRESIDENTE",
-      "CNPJ_CENTRO",
-      "DATA_FUNDACAO",
-      "ID_REGIONAL",
-    ];
+  async function findByItems({ max, searchParams }) {
+    try {
+      let centro = await database.findByItems("centro", max, searchParams);
 
-    if (searchParam == "ID_REGIONAL") {
-      const params = ["ID_REGIONAL"];
-      const idRegional = await database.findById(
-        "REGIONAL",
-        params,
-        null,
-        max,
-        "NOME_REGIONAL",
-        searchValue
-      );
-
-      searchValue = idRegional[0].ID_REGIONAL;
+      const centros = formatOutput(centro);
+      return centros;
+    } catch (error) {
+      throw error;
     }
-
-    return await database.findById(
-      "CENTRO",
-      params,
-      {
-        ID_CENTRO: centroId,
-      },
-      max,
-      searchParam,
-      searchValue
-    );
   }
   async function getItems({ max }) {
-    const params = [
-      "ID_CENTRO",
-      "NOME_CENTRO",
-      "NOME_CURTO",
-      "COMPLEMENTO",
-      "BAIRRO",
-      "CEP",
-      "ENDERECO",
-      "NUMERO_ENDERECO",
-      "COMPLEMENTO",
-      "BAIRRO",
-      "CIDADE",
-      "ESTADO",
-      "PAIS",
-      "ID_PRESIDENTE",
-      "CNPJ_CENTRO",
-      "DATA_FUNDACAO",
-      "ID_REGIONAL",
-    ];
-    return await database.getItems("CENTRO", params, max);
+    try {
+      let items = await database.getItems("centro", max);
+      const centros = formatOutput(items);
+      return centros;
+    } catch (error) {
+      throw error;
+    }
   }
-  async function remove({ centroId }) {
-    return await database.remove("CENTRO", {
-      ID_CENTRO: centroId,
-    });
+  async function remove(searchParams) {
+    try {
+      return await database.remove("centro", searchParams);
+    } catch (error) {
+      throw error;
+    }
   }
-  async function replace({ centroId, ...centro }) {
-    return await database.replace("CENTRO", centro, {
-      ID_CENTRO: centroId,
-    });
+  async function replace({ searchParams, centro }) {
+    try {
+      return await database.replace("centro", centro, searchParams);
+    } catch (error) {
+      throw error;
+    }
   }
-  async function update({ centroId, ...centro }) {
-    return await database.update("CENTRO", centro, {
-      ID_CENTRO: centroId,
-    });
+  async function update({ searchParams, centro }) {
+    try {
+      return await database.update("centro", centro, searchParams);
+    } catch (error) {
+      throw error;
+    }
   }
 };

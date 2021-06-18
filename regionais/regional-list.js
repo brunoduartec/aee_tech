@@ -4,46 +4,55 @@ const { UniqueConstraintError } = require("../helpers/errors");
 module.exports = function makeRegionalList({ database }) {
   return Object.freeze({
     add,
-    findById,
+    findByItems,
     getItems,
     remove,
     replace,
     update,
   });
+  function formatOutput(items) {
+    let regionals = [];
 
-  async function add({ regionalId, ...regional }) {
-    return await database.add("REGIONAL", regional);
+    if (items) {
+      if (items.length > 0) {
+        items.forEach((item) => {
+          let regional = makeRegional(item);
+          regionals.push(regional);
+        });
+      } else {
+        let regional = makeRegional(items);
+        regionals.push(regional);
+      }
+    }
+
+    return regionals;
   }
-  async function findById({ regionalId, max, searchParam, searchValue }) {
-    const params = ["ID_REGIONAL", "NOME_REGIONAL", "ESTADO", "PAIS"];
-    return await database.findById(
-      "REGIONAL",
-      params,
-      {
-        ID_REGIONAL: regionalId,
-      },
-      max,
-      searchParam,
-      searchValue
-    );
+
+  async function add(regionalInfo) {
+    let regional = makeRegional(regionalInfo);
+    return await database.add("regional", regional);
   }
-  async function getItems() {
-    const params = ["ID_REGIONAL", "NOME_REGIONAL", "ESTADO", "PAIS"];
-    return await database.getItems("REGIONAL", params);
+
+  async function findByItems({ max, searchParams }) {
+    let regional = await database.findByItems("regional", max, searchParams);
+    const regionals = formatOutput(regional);
+
+    return regionals;
   }
-  async function remove({ regionalId }) {
-    return await database.remove("REGIONAL", {
-      ID_REGIONAL: regionalId,
-    });
+  async function getItems({ max }) {
+    let items = await database.getItems("regional", max);
+
+    const regionals = formatOutput(items);
+
+    return regionals;
   }
-  async function replace({ regionalId, ...regional }) {
-    return await database.replace("REGIONAL", regional, {
-      ID_REGIONAL: regionalId,
-    });
+  async function remove(searchParams) {
+    return await database.remove("regional", searchParams);
   }
-  async function update({ regionalId, ...regional }) {
-    return await database.update("REGIONAL", regional, {
-      ID_REGIONAL: regionalId,
-    });
+  async function replace({ searchParams, regional }) {
+    return await database.replace("regional", regional, searchParams);
+  }
+  async function update({ searchParams, regional }) {
+    return await database.update("regional", regional, searchParams);
   }
 };
