@@ -31,14 +31,10 @@ module.exports = function makeCentroList({ database }) {
 
   async function add(centroInfo) {
     try {
-      let regional = await database.findByItems("regional", 1, {
-        NOME_REGIONAL: centroInfo.REGIONAL,
-      });
-
-      centroInfo.REGIONAL = regional.NOME_REGIONAL;
       let centro = makeCentro(centroInfo);
       return await database.add("centro", centro);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -49,6 +45,7 @@ module.exports = function makeCentroList({ database }) {
       const centros = formatOutput(centro);
       return centros;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -58,6 +55,7 @@ module.exports = function makeCentroList({ database }) {
       const centros = formatOutput(items);
       return centros;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -65,6 +63,7 @@ module.exports = function makeCentroList({ database }) {
     try {
       return await database.remove("centro", searchParams);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -72,6 +71,7 @@ module.exports = function makeCentroList({ database }) {
     try {
       return await database.replace("centro", centro, searchParams);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -79,6 +79,7 @@ module.exports = function makeCentroList({ database }) {
     try {
       return await database.update("centro", centro, searchParams);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

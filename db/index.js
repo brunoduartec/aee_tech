@@ -20,8 +20,8 @@ module.exports = function makeDb(ModelFactory) {
         item = "_id";
       }
 
-      if (item.toLocaleLowerCase().includes("id")) {
-        searchParams[item] = { value };
+      if (item.toLocaleLowerCase().includes("_id")) {
+        searchParams[item] = value;
       } else {
         searchParams[item] = { $regex: value };
       }
@@ -33,9 +33,9 @@ module.exports = function makeDb(ModelFactory) {
   async function add(modelName, pessoaInfo) {
     try {
       const Model = ModelFactory.getModel(modelName);
-      pessoa = new Model(pessoaInfo);
+      item = new Model(pessoaInfo);
 
-      await pessoa.save();
+      return await item.save();
     } catch (error) {
       throw error;
     }
@@ -44,7 +44,7 @@ module.exports = function makeDb(ModelFactory) {
     try {
       const Model = ModelFactory.getModel(modelName);
       params = formatParams(params);
-      let item = await Model.findOne(params);
+      let item = await Model.find(params);
 
       return item;
     } catch (error) {

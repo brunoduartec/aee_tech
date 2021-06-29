@@ -96,8 +96,8 @@ module.exports = function makeRegionalEndpointHandler({ regionalList }) {
     }
 
     try {
-      const regional = makeRegional(regionalInfo);
-      const result = await regionalList.add(regional);
+      const itemAdded = await regionalList.add(regionalInfo);
+      const result = makeRegional(itemAdded);
       return {
         headers: {
           "Content-Type": "application/json",

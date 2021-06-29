@@ -19,9 +19,9 @@ const centroSchema = new Schema({
     type: String,
     require: true,
   },
-  REGIONAL: {
-    type: String,
-    require: true,
+  REGIONAL_ID: {
+    type: Schema.Types.ObjectId,
+    ref: "regional",
   },
   ENDERECO: {
     type: String,
