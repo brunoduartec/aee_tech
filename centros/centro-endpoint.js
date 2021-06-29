@@ -96,7 +96,8 @@ module.exports = function makeCentroEndpointHandler({ centroList }) {
     }
 
     try {
-      const result = await centroList.add(centroInfo);
+      const itemAdded = await centroList.add(centroInfo);
+      const result = makeCentro(itemAdded);
       return {
         headers: {
           "Content-Type": "application/json",

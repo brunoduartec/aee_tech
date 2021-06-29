@@ -3,8 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const Connection = require("./db/connection")();
-const ModelFactory = require("./db/modelFactory");
 
+const ModelFactory = require("./db/modelFactory");
 const CentroModel = require("./centros/centro-model");
 const RegionalModel = require("./regionais/regional-model");
 
