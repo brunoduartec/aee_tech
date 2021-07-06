@@ -19,9 +19,6 @@ module.exports = function makeRegionalList({ database }) {
           let regional = makeRegional(item);
           regionals.push(regional);
         });
-      } else {
-        let regional = makeRegional(items);
-        regionals.push(regional);
       }
     }
 
