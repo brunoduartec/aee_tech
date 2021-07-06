@@ -16,4 +16,6 @@ const regionalSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("regional", regionalSchema);
+module.exports = {
+  model: mongoose.model("regional", regionalSchema),
+};

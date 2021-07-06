@@ -30,10 +30,25 @@ module.exports = function makeDb(ModelFactory) {
     return searchParams;
   }
 
-  async function add(modelName, pessoaInfo) {
+  function populateItems(populateInfo) {
+    let populateConcatTrimed;
+    if (populateInfo && populateInfo.length > 0) {
+      let populateConcat = "";
+
+      for (let index = 0; index < populateInfo.length; index++) {
+        const element = populateInfo[index];
+        populateConcat = populateConcat.concat(` ${element}`);
+      }
+
+      populateConcatTrimed = populateConcat.trim();
+    }
+    return populateConcatTrimed;
+  }
+
+  async function add(modelName, itemInfo) {
     try {
-      const Model = ModelFactory.getModel(modelName);
-      item = new Model(pessoaInfo);
+      const Model = ModelFactory.getModel(modelName).model;
+      item = new Model(itemInfo);
 
       return await item.save();
     } catch (error) {
@@ -42,9 +57,14 @@ module.exports = function makeDb(ModelFactory) {
   }
   async function findByItems(modelName, max, params) {
     try {
-      const Model = ModelFactory.getModel(modelName);
+      const modelInfo = ModelFactory.getModel(modelName);
+      const Model = modelInfo.model;
+      const populate = modelInfo.populate;
       params = formatParams(params);
-      let item = await Model.find(params);
+
+      let populateTags = populateItems(populate);
+
+      let item = await Model.find(params).populate(populateTags);
 
       return item;
     } catch (error) {
@@ -53,10 +73,15 @@ module.exports = function makeDb(ModelFactory) {
   }
   async function getItems(modelName, max) {
     try {
-      const Model = ModelFactory.getModel(modelName);
-      let items = await Model.find();
+      const modelInfo = ModelFactory.getModel(modelName);
 
-      if (items.length > 0) {
+      const Model = modelInfo.model;
+      const populate = modelInfo.populate;
+
+      let populateTags = populateItems(populate);
+      let items = await Model.find().populate(populateTags);
+
+      if (items && items.length > 0) {
         return items;
       } else {
         return null;
@@ -67,7 +92,8 @@ module.exports = function makeDb(ModelFactory) {
   }
   async function remove(modelName, conditions) {
     try {
-      const Model = ModelFactory.getModel(modelName);
+      const ModelInfo = ModelFactory.getModel(modelName);
+      const Model = ModelInfo.model;
       conditions = formatParams(conditions);
       const result = await Model.deleteOne(conditions);
       return result;
@@ -77,7 +103,8 @@ module.exports = function makeDb(ModelFactory) {
   }
   async function replace(modelName, item, conditions) {
     try {
-      const Model = ModelFactory.getModel(modelName);
+      const ModelInfo = ModelFactory.getModel(modelName);
+      const Model = ModelInfo.model;
       conditions = formatParams(conditions);
       const result = await Model.replaceOne(conditions, item);
       return result;
@@ -87,7 +114,8 @@ module.exports = function makeDb(ModelFactory) {
   }
   async function update(modelName, item, conditions) {
     try {
-      const Model = ModelFactory.getModel(modelName);
+      const ModelInfo = ModelFactory.getModel(modelName);
+      const Model = ModelInfo.model;
       conditions = formatParams(conditions);
       const result = await Model.updateOne(conditions, item);
       return result;

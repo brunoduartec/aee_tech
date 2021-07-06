@@ -20,9 +20,6 @@ module.exports = function makeCentroList({ database }) {
           let centro = makeCentro(item);
           centros.push(centro);
         });
-      } else {
-        let centro = makeCentro(items);
-        centros.push(centro);
       }
     }
 

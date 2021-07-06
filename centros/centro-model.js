@@ -19,7 +19,7 @@ const centroSchema = new Schema({
     type: String,
     require: true,
   },
-  REGIONAL_ID: {
+  REGIONAL: {
     type: Schema.Types.ObjectId,
     ref: "regional",
   },
@@ -57,8 +57,36 @@ const centroSchema = new Schema({
   },
   PRESIDENTE_ID: {
     type: String,
-    require: true,
+    require: false,
+  },
+  ASSISTIDOS: {
+    type: Number,
+    required: false,
+  },
+  VOLUNTARIOS: {
+    type: Number,
+    required: false,
+  },
+  PRELETORES: {
+    type: Number,
+    required: false,
+  },
+  ENTREVISTADORES: {
+    type: Number,
+    required: false,
+  },
+  FUNCIONAMENTO: {
+    SEGUNDA: [Number],
+    TERCA: [Number],
+    QUARTA: [Number],
+    QUINTA: [Number],
+    SEXTA: [Number],
+    SABADO: [Number],
+    DOMINGO: [Number],
   },
 });
 
-module.exports = mongoose.model("centro", centroSchema);
+module.exports = {
+  model: mongoose.model("centro", centroSchema),
+  populate: ["REGIONAL"],
+};
