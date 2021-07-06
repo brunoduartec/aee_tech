@@ -79,7 +79,7 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     NOME_CURTO,
     CNPJ_CENTRO,
     DATA_FUNDACAO,
-    REGIONAL_ID,
+    REGIONAL,
     ENDERECO,
     NUMERO_ENDERECO,
     COMPLEMENTO,
@@ -89,6 +89,11 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     ESTADO,
     PAIS,
     PRESIDENTE_ID,
+    ASSISTIDOS,
+    VOLUNTARIOS,
+    PRELETORES,
+    ENTREVISTADORES,
+    FUNCIONAMENTO,
     _id,
   }) {
     DATA_FUNDACAO = normalizeDate(DATA_FUNDACAO);
@@ -97,12 +102,21 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
     CIDADE = normalizeText(CIDADE);
     ESTADO = normalizeText(ESTADO);
     PAIS = normalizeText(PAIS);
+
+    if (REGIONAL && REGIONAL.NOME_REGIONAL) {
+      REGIONAL = {
+        NOME_REGIONAL: REGIONAL ? REGIONAL.NOME_REGIONAL : "",
+        PAIS: REGIONAL ? REGIONAL.PAIS : "",
+      };
+    } else {
+      REGIONAL = REGIONAL;
+    }
     return {
       NOME_CENTRO,
       NOME_CURTO,
       CNPJ_CENTRO,
       DATA_FUNDACAO,
-      REGIONAL_ID,
+      REGIONAL,
       ENDERECO,
       NUMERO_ENDERECO,
       COMPLEMENTO,
@@ -112,6 +126,11 @@ module.exports = function makeCentro(centroInfo = requiredParam("centroInfo")) {
       ESTADO,
       PAIS,
       PRESIDENTE_ID,
+      FUNCIONAMENTO,
+      ASSISTIDOS,
+      VOLUNTARIOS,
+      PRELETORES,
+      ENTREVISTADORES,
       ID: _id,
     };
   }
